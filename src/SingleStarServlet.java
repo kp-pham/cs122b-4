@@ -44,8 +44,8 @@ public class SingleStarServlet extends HttpServlet {
             String query = "SELECT S.id, S.name, S.birthYear, " +
                            "JSON_ARRAYAGG(JSON_OBJECT('id', M.id, 'title', M.title)) AS movies " +
                            "FROM stars AS S " +
-                           "INNER JOIN stars_in_movies AS SIM ON S.id = SIM.starId " +
-                           "INNER JOIN movies AS M ON SIM.movieId = M.id " +
+                           "LEFT JOIN stars_in_movies AS SIM ON S.id = SIM.starId " +
+                           "LEFT JOIN movies AS M ON SIM.movieId = M.id " +
                            "WHERE S.id = ? " +
                            "GROUP BY S.id, S.name, S.birthYear";
 
