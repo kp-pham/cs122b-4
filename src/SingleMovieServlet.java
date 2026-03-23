@@ -37,8 +37,14 @@ public class SingleMovieServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT * FROM movies AS M, stars_in_movies AS SIM, stars AS S, ratings AS R" +
-                           "WHERE M.id = SIM.movie_id AND SIM.starId = S.id AND M.id = R.movie_id AND M.id = ?";
+
+            // Minimize number of reads to avoid the N + 1 problem
+            String query = "SELECT * FROM movies AS M," +
+                           "genres_in_movies AS GIM, genres AS G," +
+                           "stars_in_movies AS SIM, stars AS S, ratings AS R" +
+                           "WHERE M.id = GIM.movie_id AND GIM.genre_id = G.id" +
+                           "AND M.id = SIM.movie_id AND SIM.star_id = S.id" +
+                           "AND M.id = R.movie_id AND M.id = ?";
 
             PreparedStatement statement = conn.prepareStatement(query);
 
