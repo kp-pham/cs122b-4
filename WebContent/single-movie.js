@@ -16,6 +16,28 @@ function getParameterByName(target) {
     return decodeURIComponent(results[2]);
 }
 
+function handleResult(resultData) {
+    let movieInfo = jQuery("#movie_info");
+
+    movieInfo.append(`<p>${resultData['title']} (${resultData['year']})</p>`);
+
+    let movieTable = jQuery("#movie_table");
+
+    let row = `
+        <tr>
+            <td>${resultData['director']}</td>
+            <td>${resultData['genres']}</td>
+            <td>
+                ${resultData['stars'].map(({id, name}) => {
+                    return `<a href="single-star.html?id=${id}">${name}</a>`
+                }).join(', ')}
+            </td>
+        </tr>
+    `;
+
+    movieTable.append(row);
+}
+
 let movieId = getParameterByName('id')
 
 // 404 Page for failure?
