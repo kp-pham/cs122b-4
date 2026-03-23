@@ -40,17 +40,17 @@ public class SingleMovieServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-
-            // Minimize number of reads to avoid the N + 1 problem
-            String query = "SELECT M.id, M.title, M.year, M.director, S.id AS starId, S.name, R.rating" +
-                           "JSON_ARRAYAGG(DISTINCT G.name) AS genres, JSON_ARRAYAGG(JSON_OBJECT('id', S.id AS starId, 'name', S.name)" +
-                           "FROM movies AS M" +
-                           "INNER JOIN genres_in_movies AS GIM ON M.id = GIM.movieId" +
-                           "INNER JOIN genres AS G ON GIM.genreId = G.id" +
-                           "INNER JOIN stars_in_movies AS SIM ON M.id = SIM.movieId" +
-                           "INNER JOIN stars AS S ON SIM.starId = S.id" +
-                           "INNER JOIN ratings AS R ON M.id = R.movieId" +
-                           "WHERE M.id = ?";
+            String query = "SELECT M.id, M.title, M.year, M.director, R.rating, " +
+                           "JSON_ARRAYAGG(G.name) AS genres, " +
+                           "JSON_ARRAYAGG(JSON_OBJECT('id', S.id, 'name', S.name)) AS stars " +
+                           "FROM movies AS M " +
+                           "INNER JOIN genres_in_movies AS GIM ON M.id = GIM.movieId " +
+                           "INNER JOIN genres AS G ON GIM.genreId = G.id " +
+                           "INNER JOIN stars_in_movies AS SIM ON M.id = SIM.movieId " +
+                           "INNER JOIN stars AS S ON SIM.starId = S.id " +
+                           "INNER JOIN ratings AS R ON M.id = R.movieId " +
+                           "WHERE M.id = ? " +
+                           "GROUP BY M.id, M.title, M.year, M.director, R.rating";
 
             PreparedStatement statement = conn.prepareStatement(query);
 
