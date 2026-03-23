@@ -39,12 +39,15 @@ public class SingleMovieServlet extends HttpServlet {
         try (Connection conn = dataSource.getConnection()) {
 
             // Minimize number of reads to avoid the N + 1 problem
-            String query = "SELECT * FROM movies AS M," +
-                           "genres_in_movies AS GIM, genres AS G," +
-                           "stars_in_movies AS SIM, stars AS S, ratings AS R" +
-                           "WHERE M.id = GIM.movie_id AND GIM.genre_id = G.id" +
-                           "AND M.id = SIM.movie_id AND SIM.star_id = S.id" +
-                           "AND M.id = R.movie_id AND M.id = ?";
+            String query = "SELECT M.id, M.title, M.year, M.director, S.id AS starId, S.name," +
+                           "JSON_ARRAYAGG(DISTINCT G.name) AS genres, JSON_ARRAYAGG(JSON_OBJECT('id', S.id AS starId, 'name', S.name)" +
+                           "FROM movies AS M" +
+                           "INNER JOIN genres_in_movies AS GIM ON M.id = GIM.movieId" +
+                           "INNER JOIN genres AS G ON GIM.genreId = G.id" +
+                           "INNER JOIN stars_in_movies AS SIM ON M.id = SIM.movieId" +
+                           "INNER JOIN stars AS S ON SIM.starId = S.id" +
+                           "INNER JOIN ratings AS R ON M.id = R.movieId" +
+                           "WHERE M.id = ?";
 
             PreparedStatement statement = conn.prepareStatement(query);
 
