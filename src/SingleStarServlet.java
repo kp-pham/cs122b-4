@@ -16,12 +16,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 @WebServlet(name = "SingleStarServlet", urlPatterns= "/api/single-star")
-public class SingleStarservlet extends HttpServlet {
+public class SingleStarServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedbe");
+            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();
         }
