@@ -41,7 +41,7 @@ public class MovieListServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT M.id, M.title, M.year, M.director, R.rating, " +
+            String query = "SELECT M.id, M.title, M.year, M.director, M.rating, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT G.name SEPARATOR ', '), ']') AS genres, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('id', S.id, 'name', S.name)), ']') AS stars " +
                            "FROM ( " +
@@ -55,8 +55,7 @@ public class MovieListServlet extends HttpServlet {
                            "LEFT JOIN genres AS G ON GIM.genreId = G.id " +
                            "LEFT JOIN stars_in_movies AS SIM ON M.id = SIM.movieId " +
                            "LEFT JOIN stars AS S ON SIM.starId = S.id " +
-                           "LEFT JOIN ratings AS R ON M.id = R.movieId " +
-                           "GROUP BY M.id, M.title, M.year, M.director, R.rating";
+                           "GROUP BY M.id, M.title, M.year, M.director, M.rating";
 
             PreparedStatement statement = conn.prepareStatement(query);
 
@@ -71,7 +70,7 @@ public class MovieListServlet extends HttpServlet {
                 jsonObject.addProperty("title", rs.getString("M.title"));
                 jsonObject.addProperty("year", rs.getString("M.year"));
                 jsonObject.addProperty("director", rs.getString("M.director"));
-                jsonObject.addProperty("rating", rs.getString("R.rating"));
+                jsonObject.addProperty("rating", rs.getString("M.rating"));
 
                 JsonArray genresArray = JsonParser.parseString(rs.getString("genres")).getAsJsonArray();
                 jsonObject.add("genres", genresArray);
