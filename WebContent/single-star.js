@@ -17,6 +17,8 @@ function getParameterByName(target) {
 }
 
 function handleResult(resultData) {
+    $('title').text(resultData["name"]);
+
     let starInfo = jQuery("#star_info");
 
     starInfo.append("<p>Star Name: " + resultData["name"] + "</p>" +

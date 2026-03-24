@@ -17,6 +17,8 @@ function getParameterByName(target) {
 }
 
 function handleResult(resultData) {
+    $("title").text(resultData["title"]);
+
     let movieInfo = jQuery("#movie_info");
 
     movieInfo.append(`<p>${resultData['title']} (${resultData['year']})</p>`);
