@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 @WebServlet(name = "MovieListServlet", urlPatterns="/api/")
 public class MovieListServlet extends HttpServlet {
@@ -43,15 +44,19 @@ public class MovieListServlet extends HttpServlet {
             String query = "SELECT M.id, M.title, M.year, M.director, R.rating, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT G.name SEPARATOR ', '), ']') AS genres, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('id', S.id, 'name', S.name)), ']') AS stars " +
-                           "FROM movies AS M " +
+                           "FROM ( " +
+                           "    SELECT M.id, M.title, M.year, M.director, R.rating " +
+                           "    FROM movies AS M " +
+                           "    LEFT JOIN ratings R ON M.id = R.movieId " +
+                           "    ORDER BY R.rating DESC " +
+                           "    LIMIT 20" +
+                           ") AS M " +
                            "LEFT JOIN genres_in_movies AS GIM ON M.id = GIM.movieId " +
                            "LEFT JOIN genres AS G ON GIM.genreId = G.id " +
                            "LEFT JOIN stars_in_movies AS SIM ON M.id = SIM.movieId " +
                            "LEFT JOIN stars AS S ON SIM.starId = S.id " +
                            "LEFT JOIN ratings AS R ON M.id = R.movieId " +
-                           "GROUP BY M.id, M.title, M.year, M.director, R.rating " +
-                           "ORDER BY R.rating DESC " +
-                           "LIMIT 20";
+                           "GROUP BY M.id, M.title, M.year, M.director, R.rating";
 
             PreparedStatement statement = conn.prepareStatement(query);
 
