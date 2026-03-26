@@ -32,8 +32,19 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServlet response) throws IOException {
-        String username = request.getParameter("username");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
+
+        JsonObject jsonObject = new JsonObject();
+
+        try (Connection conn = dataSource.getConnection()) {
+            String query = "SELECT password FROM customers WHERE email = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, email);
+            ResultSet rs = statement.executeQuery();
+        }
     }
 }
