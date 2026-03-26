@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
@@ -45,6 +46,17 @@ public class LoginServlet extends HttpServlet {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
+
+            JsonObject jsonObject = new JsonObject();
+
+            if (rs.next() && password.equals(rs.getString("password"))) {
+                request.getSession().setAttribute("user", new User(email));
+                jsonObject.addProperty("status", "success");
+                jsonObject.addProperty("message", "success");
+
+            } else {
+
+            }
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", e.getMessage());
