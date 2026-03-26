@@ -34,4 +34,10 @@ public class LoginFilter implements Filter {
     private boolean isUrlAllowedWithoutLogin(String requestURI) {
         return allowedURIs.stream().anyMatch(requestURI.toLowerCase()::endsWith);
     }
+
+    public void init(FilterConfig fConfig) {
+        allowedURIs.add("login.html");
+        allowedURIs.add("login.js");
+        allowedURIs.add("api/login");
+    }
 }
