@@ -1,5 +1,11 @@
 let login_form = $("#login_form");
 
+fuction handleLoginResult(resultDataString) {
+    let resultDataJson = JSON.parse(resultDataString);
+
+
+}
+
 function submitLoginForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
