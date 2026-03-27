@@ -10,17 +10,19 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Login</title>
 </head>
-    <body>
-        <div id="login_error_message"></div>
-        <form id="login_form" method="POST" action="#">
-            <label for="email">Email Address</label>
-            <input name="email" type="email" id="email" required>
+    <body class="d-flex flex-column justify-content-center align-items-center bg-dark">
+        <div id="login" class="bg-white">
+            <div id="login_error_message" class="alert alert-danger" role="alert"></div>
+            <form id="login_form" method="POST" action="#">
+                <label for="email">Email Address</label>
+                <input name="email" type="email" id="email" required>
 
-            <label for="password">Password</label>
-            <input name="password" type="password" id="password" required>
+                <label for="password">Password</label>
+                <input name="password" type="password" id="password" required>
 
-            <button type="submit">Login</button>
-        </form>
+                <button type="submit">Login</button>
+            </form>
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
