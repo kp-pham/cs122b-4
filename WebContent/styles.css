@@ -12,3 +12,7 @@
     font-size: 3rem;
     font-family: Fugaz One, sans-serif;
 }
+
+#login {
+    max-width: 400px;
+}
