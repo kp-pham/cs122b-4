@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -103,6 +102,34 @@ public class SearchServlet extends HttpServlet {
             for (int i = 0; i < params.size(); ++i) {
                 statement.setObject(i + 1, params.get(i));
             }
+
+            ResultSet rs = statement.executeQuery();
+
+            JsonArray jsonArray = new JsonArray();
+
+            while (rs.next()) {
+                JsonObject jsonObject = new JsonObject();
+
+                jsonObject.addProperty("id", rs.getString("M.id"));
+                jsonObject.addProperty("title", rs.getString("M.title"));
+                jsonObject.addProperty("year", rs.getString("M.year"));
+                jsonObject.addProperty("director", rs.getString("M.director"));
+                jsonObject.addProperty("rating", rs.getString("M.rating"));
+
+                JsonArray genresArray = JsonParser.parseString(rs.getString("genres")).getAsJsonArray();
+                jsonObject.add("genres", genresArray);
+
+                JsonArray starsArray = JsonParser.parseString(rs.getString("stars")).getAsJsonArray();
+                jsonObject.add("stars", starsArray);
+
+                jsonArray.add(jsonObject);
+            }
+
+            rs.close();
+            statement.close();
+
+            out.write(jsonArray.toString());
+            response.setStatus(200);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
