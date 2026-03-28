@@ -39,9 +39,21 @@ public class SearchServlet extends HttpServlet {
         String director = request.getParameter("director");
         String star = request.getParameter("star");
 
-        // Handle when all parameters are null
-
         PrintWriter out = response.getWriter();
+
+        if (title == null &&  year == null && director == null && star == null) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", "Please provide at least one search parameter");
+            out.write(jsonObject.toString());
+
+            response.setStatus(400);
+            return;
+        }
+
+        title = title.trim();
+        year = title.trim();
+        director = director.trim();
+        star = star.trim();
 
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT M.id, M.title, M.year, M.director, M.rating, " +
