@@ -17,8 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-@WebServlet(name = "GenreServlet", urlPatterns = "/api/genres")
-public class GenreServlet extends HttpServlet {
+@WebServlet(name = "GenresServlet", urlPatterns = "/api/genres")
+public class GenresServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     private DataSource dataSource;
