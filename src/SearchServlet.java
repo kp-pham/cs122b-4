@@ -51,7 +51,7 @@ public class SearchServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        if (title == null &&  year == null && director == null && star == null) {
+        if (!hasTitle && !hasYear && !hasDirector && !hasStar) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("errorMessage", "Please provide at least one search parameter");
             out.write(jsonObject.toString());
