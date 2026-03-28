@@ -39,6 +39,16 @@ public class SearchServlet extends HttpServlet {
         String director = request.getParameter("director");
         String star = request.getParameter("star");
 
+        String trimmedTitle = (title == null) ? null : title.trim();
+        String trimmedYear = (year == null) ? null : year.trim();
+        String trimmedDirector = (director == null) ? null : director.trim();
+        String trimmedStar = (star == null) ? null : star.trim();
+
+        boolean hasTitle = (title != null && !title.isEmpty());
+        boolean hasYear = (title != null && !year.isEmpty());
+        boolean hasDirector = (director != null && !director.isEmpty());
+        boolean hasStar = (star != null && !star.isEmpty());
+
         PrintWriter out = response.getWriter();
 
         if (title == null &&  year == null && director == null && star == null) {
@@ -49,11 +59,6 @@ public class SearchServlet extends HttpServlet {
             response.setStatus(400);
             return;
         }
-
-        title = title.trim();
-        year = title.trim();
-        director = director.trim();
-        star = star.trim();
 
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT M.id, M.title, M.year, M.director, M.rating, " +
@@ -66,15 +71,15 @@ public class SearchServlet extends HttpServlet {
                            "LEFT JOIN stars AS S ON SIM.starId = S.id " +
                            "WHERE 1 = 1 ";
 
-            if (title != null && !title.trim().isEmpty()) {
+            if (title != null && !title.isEmpty()) {
                 query += "AND M.title ILIKE ? ";
             }
 
-            if (year != null && !year.trim().isEmpty()) {
+            if (year != null && !year.isEmpty()) {
                 query += "AND M.year = ? ";
             }
 
-            if (director != null && !director.trim().isEmpty()) {
+            if (director != null && !director.isEmpty()) {
                 query += "AND M.director ILIKE ? ";
             }
 
