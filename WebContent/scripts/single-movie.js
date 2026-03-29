@@ -25,7 +25,7 @@ function handleResult(resultData) {
     let row = `
         <tr>
             <td>${resultData['director']}</td>
-            <td>${resultData['genres']}</td>
+            <td>${resultData['genres'].join(', ')}</td>
             <td>
                 ${resultData['stars'].map(({id, name}) => {
                     return `<a href="single-star.html?id=${id}">${name}</a>`
