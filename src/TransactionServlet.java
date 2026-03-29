@@ -71,7 +71,7 @@ public class TransactionServlet extends HttpServlet {
             }
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("total", total);
+            jsonObject.addProperty("total", total.doubleValue());
 
             out.write(jsonObject.toString());
             response.setStatus(200);

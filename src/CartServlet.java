@@ -87,7 +87,7 @@ public class CartServlet extends HttpServlet {
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.add("items", jsonArray);
-            jsonObject.addProperty("total", total);
+            jsonObject.addProperty("total", total.doubleValue());
 
             out.write(jsonObject.toString());
             response.setStatus(200);
