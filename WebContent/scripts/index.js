@@ -28,9 +28,26 @@ function submitSearchForm(formSubmitEvent) {
     if (title.length === 0 && year.length === 0 && director.length === 0 && star.length === 0) {
         return;
     }
-    else {
 
+    let params = [];
+
+    if (title.length !== 0) {
+        params.push(`title=${encodeURIComponent(title)}`);
     }
+
+    if (year.length !== 0) {
+        params.push(`year=${encodeURIComponent(year)}`);
+    }
+
+    if (director.length !== 0) {
+        params.push(`director=${encodeURIComponent(director)}`);
+    }
+
+    if (star.length !== 0) {
+        params.push(`star=${encodeURIComponent(star)}`);
+    }
+
+    window.location.href = "search.html?" + params.join("&");
 }
 
 showPrefixes();
