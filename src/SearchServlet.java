@@ -63,7 +63,7 @@ public class SearchServlet extends HttpServlet {
         }
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT M.id, M.title, M.year, M.director, M.rating, " +
+            String query = "SELECT M.id, M.title, M.year, M.director, R.rating, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT G.name SEPARATOR ', '), ']') AS genres, " +
                            "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('id', S.id, 'name', S.name)), ']') AS stars " +
                            "FROM movies AS M " +
@@ -71,12 +71,13 @@ public class SearchServlet extends HttpServlet {
                            "LEFT JOIN genres AS G ON GIM.genreId = G.id " +
                            "LEFT JOIN stars_in_movies AS SIM ON M.id = SIM.movieId " +
                            "LEFT JOIN stars AS S ON SIM.starId = S.id " +
+                           "LEFT JOIN ratings AS R ON R.movieId = M.id " +
                            "WHERE 1 = 1 ";
 
             List<Object> params = new ArrayList<>();
 
             if (hasTitle) {
-                query += "AND M.title ILIKE ? ";
+                query += "AND M.title LIKE ? ";
                 params.add("%" + trimmedTitle + "%");
             }
 
@@ -86,7 +87,7 @@ public class SearchServlet extends HttpServlet {
             }
 
             if (hasDirector) {
-                query += "AND M.director ILIKE ? ";
+                query += "AND M.director LIKE ? ";
                 params.add("%" + trimmedDirector + "%");
             }
 
@@ -95,8 +96,8 @@ public class SearchServlet extends HttpServlet {
                 params.add("%" + trimmedStar + "%");
             }
 
-            query += "GROUP BY M.id, M.title, M.year, M.director, M.rating " +
-                     "ORDER BY M.rating DESC";
+            query += "GROUP BY M.id, M.title, M.year, M.director, R.rating " +
+                     "ORDER BY R.rating DESC";
 
             PreparedStatement statement = conn.prepareStatement(query);
             for (int i = 0; i < params.size(); ++i) {
@@ -114,7 +115,7 @@ public class SearchServlet extends HttpServlet {
                 jsonObject.addProperty("title", rs.getString("M.title"));
                 jsonObject.addProperty("year", rs.getString("M.year"));
                 jsonObject.addProperty("director", rs.getString("M.director"));
-                jsonObject.addProperty("rating", rs.getString("M.rating"));
+                jsonObject.addProperty("rating", rs.getString("R.rating"));
 
                 JsonArray genresArray = JsonParser.parseString(rs.getString("genres")).getAsJsonArray();
                 jsonObject.add("genres", genresArray);
