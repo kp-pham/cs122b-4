@@ -46,10 +46,10 @@ public class SearchServlet extends HttpServlet {
         String trimmedDirector = (director == null) ? null : director.trim();
         String trimmedStar = (star == null) ? null : star.trim();
 
-        boolean hasTitle = (title != null && !title.isEmpty());
-        boolean hasYear = (year != null && !year.isEmpty());
-        boolean hasDirector = (director != null && !director.isEmpty());
-        boolean hasStar = (star != null && !star.isEmpty());
+        boolean hasTitle = (trimmedTitle != null && !trimmedTitle.isEmpty());
+        boolean hasYear = (trimmedYear != null && !trimmedYear.isEmpty());
+        boolean hasDirector = (trimmedDirector != null && !trimmedDirector.isEmpty());
+        boolean hasStar = (trimmedStar != null && !trimmedStar.isEmpty());
 
         PrintWriter out = response.getWriter();
 

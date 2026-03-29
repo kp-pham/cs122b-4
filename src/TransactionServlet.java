@@ -99,6 +99,32 @@ public class TransactionServlet extends HttpServlet {
             return;
         }
 
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String card = request.getParameter("card");
+        String expiration = request.getParameter("expiration");
+
+        String trimmedFirstName = (firstName == null) ? null : firstName.trim();
+        String trimmedLastName = (lastName == null) ? null : lastName.trim();
+        String trimmedCard = (card == null) ? null : card.trim();
+        String trimmedExpiration = (expiration == null) ? null : expiration.trim();
+
+        boolean hasFirstName = (trimmedFirstName != null && !trimmedFirstName.isEmpty());
+        boolean hasLastName = (trimmedLastName != null && !trimmedLastName.isEmpty());
+        boolean hasCard = (trimmedCard != null && !trimmedCard.isEmpty());
+        boolean hasExpiration = (trimmedExpiration != null && !trimmedExpiration.isEmpty());
+
+        PrintWriter out = response.getWriter();
+
+        if (!hasFirstName || !hasLastName || !hasCard || !hasExpiration) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", "Please provide the required payment information");
+            out.write(jsonObject.toString());
+
+            response.setStatus(400);
+            return;
+        }
+
 
     }
 }
