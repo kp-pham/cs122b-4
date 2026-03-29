@@ -92,7 +92,13 @@ public class SearchServlet extends HttpServlet {
             }
 
             if (hasStar) {
-                query += "AND S.name ILIKE ? ";
+                query += "AND EXISTS (" +
+                         "    SELECT 1 " +
+                         "    FROM stars_in_movies AS SIM " +
+                         "    LEFT JOIN stars AS S ON SIM.starId = S.id " +
+                         "    WHERE SIM.movieId = M.id " +
+                         "    AND S.name LIKE ? " +
+                         ") ";
                 params.add("%" + trimmedStar + "%");
             }
 
