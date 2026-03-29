@@ -126,6 +126,9 @@ public class TransactionServlet extends HttpServlet {
         }
 
         try (Connection conn = dataSource.getConnection()) {
+            String query = "INSERT INTO sales (customerId, movieId, saleDate, quantity) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(query);
+
 
 
         } catch (Exception e) {
