@@ -104,4 +104,16 @@ public class CartServlet extends HttpServlet {
             out.close();
         }
     }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+
+        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        if (cart == null) {
+            cart = new HashMap<>();
+            session.setAttribute("cart", cart);
+        }
+
+
+    }
 }
