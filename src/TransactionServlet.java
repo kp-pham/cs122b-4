@@ -52,7 +52,29 @@ public class TransactionServlet extends HttpServlet {
         BigDecimal total = BigDecimal.ZERO;
 
         try (Connection conn = dataSource.getConnection()) {
+            String query = "SELECT price FROM movies WHERE id = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
 
+            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+                int movieId = entry.getKey();
+                int quantity = entry.getValue();
+
+                statement.setInt(1, movieId);
+                ResultSet rs = statement.executeQuery();
+
+                if (!rs.next()) continue;
+
+                BigDecimal price = rs.getBigDecimal("price");
+
+                BigDecimal subtotal = price.multiply(new BigDecimal(quantity));
+                total = total.add(subtotal);
+            }
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("total", total);
+
+            out.write(jsonObject.toString());
+            response.setStatus(200);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
