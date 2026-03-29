@@ -17,6 +17,22 @@ function showPrefixes() {
     }
 }
 
+function submitSearchForm(formSubmitEvent) {
+    formSubmitEvent.preventDefault();
+
+    let title = $.trim($("input[name=title]").val());
+    let year = $.trim($("input[name=year]").val());
+    let director = $.trim($("input[name=director]").val());
+    let star = $.trim($("input[name=star]").val());
+
+    if (title.length === 0 && year.length === 0 && director.length === 0 && star.length === 0) {
+        return;
+    }
+    else {
+
+    }
+}
+
 showPrefixes();
 
 jQuery.ajax({
