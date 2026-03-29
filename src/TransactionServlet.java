@@ -88,4 +88,17 @@ public class TransactionServlet extends HttpServlet {
             out.close();
         }
     }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+
+        HttpSession session = request.getSession();
+
+        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        if (cart == null || cart.isEmpty()) {
+            return;
+        }
+
+
+    }
 }
