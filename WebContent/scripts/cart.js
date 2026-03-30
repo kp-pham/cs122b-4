@@ -25,8 +25,8 @@ function handleResult(resultData) {
                         <button class="rounded text-white" style="background-color: #fe0000; border-color: #fe0000;">Remove</button>
                     </form>
                 </td>
-                <td>$${item['price']}</td>
-                <td>$${item['subtotal']}</td>
+                <td>$${item['price'].toFixed(2)}</td>
+                <td>$${item['subtotal'].toFixed(2)}</td>
             </tr>
         `;
     });
