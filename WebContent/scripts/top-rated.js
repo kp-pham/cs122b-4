@@ -17,7 +17,7 @@ function handleResult(resultData) {
                 </td>
                 <td>${(movie['rating'] ?? "N/A")}</td>
                 <td>
-                    <form id="cart-form" method="POST" action="#">
+                    <form class="cart-form" method="POST" action="#">
                         <input type="hidden" name="id" value="${movie['id']}">
                         <button type="submit" class="rounded p-2 text-white bg-dark">Add</button>
                     </form>
@@ -48,4 +48,4 @@ jQuery.ajax({
    success: (resultData) => handleResult(resultData)
 });
 
-$("#cart-form").submit(submitCartForm);
+$(document).on("submit", ".cart-form", submitCartForm);
