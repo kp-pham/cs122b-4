@@ -127,6 +127,14 @@ public class TransactionServlet extends HttpServlet {
         }
 
         try (Connection conn = dataSource.getConnection()) {
+            String query = "SELECT * FROM creditcards WHERE id = ? AND firstName = ? AND lastname = ? AND expiration = ?";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, trimmedCard);
+            statement.setString(2, trimmedFirstName);
+            statement.setString(3, trimmedLastName);
+            statement.setDate(4, Date.valueOf(trimmedExpiration));
+
             String insertQuery = "INSERT INTO sales (customerId, movieId, saleDate, quantity) VALUES (?, ?, ?, ?)";
             PreparedStatement insertStatement = conn.prepareStatement(insertQuery);
 
