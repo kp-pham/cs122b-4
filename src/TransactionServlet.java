@@ -135,6 +135,21 @@ public class TransactionServlet extends HttpServlet {
             statement.setString(3, trimmedLastName);
             statement.setDate(4, Date.valueOf(trimmedExpiration));
 
+            ResultSet rs =  statement.executeQuery();
+
+            if (!rs.next()) {
+                JsonObject jsonObject = new JsonObject();
+
+                request.getServletContext().log("Transaction not processed");
+                jsonObject.addProperty("status", "fail");
+                jsonObject.addProperty("message", "Invalid payment information");
+
+                out.write(jsonObject.toString());
+                response.setStatus(400);
+
+                return;
+            }
+
             String insertQuery = "INSERT INTO sales (customerId, movieId, saleDate, quantity) VALUES (?, ?, ?, ?)";
             PreparedStatement insertStatement = conn.prepareStatement(insertQuery);
 
