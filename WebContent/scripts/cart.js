@@ -1,5 +1,5 @@
 function handleResult(resultData) {
-    let itemsTable = $("#items-table");
+    let itemsList = $("#items-table-body");
 
     resultData["items"].forEach(item => {
         let row = `
@@ -20,8 +20,22 @@ function handleResult(resultData) {
             </tr>
         `;
 
-        itemsTable.append(row);
+        itemsList.append(row);
     });
+
+    let itemsTable = $("#items-table");
+
+    let footer = `
+        <tfoot>
+            <tr>
+                <td colspan="3"></td>
+                <td class="text-end text-dark fw-bold">Total:</td>
+                <td>${resultData["total"]}</td>
+            </tr>
+        </tfoot>
+    `;
+
+    itemsTable.append(footer);
 }
 
 jQuery.ajax({
