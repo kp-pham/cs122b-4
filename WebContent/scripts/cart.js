@@ -94,6 +94,11 @@ function submitRemoveForm(submitFormEvent) {
     });
 }
 
+function submitProceedForm(submitFormEvent) {
+    submitFormEvent.preventDefault();
+    window.location.href = "payment.html";
+}
+
 jQuery.ajax({
     dataType: "json",
     method: "GET",
@@ -104,3 +109,5 @@ jQuery.ajax({
 $(document).on("submit", ".add-form", submitAddForm);
 $(document).on("submit", ".subtract-form", submitSubtractForm);
 $(document).on("submit", ".remove-form", submitRemoveForm);
+
+$("#proceed-form").submit(submitProceedForm);
