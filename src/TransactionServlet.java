@@ -135,9 +135,40 @@ public class TransactionServlet extends HttpServlet {
 
             Date date = new Date(System.currentTimeMillis());
 
+            BigDecimal total =  BigDecimal.ZERO;
+
+            JsonArray jsonArray = new JsonArray();
+
             for (Map.Entry<String, Integer> entry : cart.entrySet()) {
                 String movieId = entry.getKey();
                 int quantity = entry.getValue();
+
+                String selectQuery = "SELECT title, price FROM movies WHERE id = ?";
+
+                PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+                selectStatement.setString(1, movieId);
+
+                ResultSet rs = selectStatement.executeQuery();
+
+                if (!rs.next())
+                    continue;
+
+                String title = rs.getString("title");
+                BigDecimal price = rs.getBigDecimal("price");
+
+                BigDecimal subtotal = price.multiply(new BigDecimal(quantity));
+                subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
+
+                total = total.add(subtotal);
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("movieId", movieId);
+                jsonObject.addProperty("title", title);
+                jsonObject.addProperty("quantity", quantity);
+                jsonObject.addProperty("price", price.setScale(2, RoundingMode.HALF_UP).doubleValue());
+                jsonObject.addProperty("subtotal", subtotal.doubleValue());
+
+                jsonArray.add(jsonObject);
 
                 insertStatement.setInt(1, customerId);
                 insertStatement.setString(2, movieId);
@@ -149,15 +180,12 @@ public class TransactionServlet extends HttpServlet {
 
             insertStatement.executeBatch();
 
-            String selectQuery = "SELECT S.id, M.id, M.title, M.price, S.quantity, (M.price * S.quantity) AS subtotal " +
-                                 "FROM sales AS S " +
-                                 "INNER JOIN movies AS M ON S.movieId = M.id " +
-                                 "WHERE S.customerId = ?";
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.add("sales", jsonArray);
+            jsonObject.addProperty("total", total.doubleValue());
 
-            PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
-            selectStatement.setInt(1, customerId);
-
-            ResultSet rs = selectStatement.executeQuery();
+            out.write(jsonObject.toString());
+            response.setStatus(200);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
