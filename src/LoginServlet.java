@@ -54,11 +54,13 @@ public class LoginServlet extends HttpServlet {
                 request.getSession().setAttribute("customer", new Customer(id, email));
                 jsonObject.addProperty("status", "success");
                 jsonObject.addProperty("message", "success");
+                response.setStatus(200);
 
             } else {
                 request.getServletContext().log("Login failed");
                 jsonObject.addProperty("status", "fail");
                 jsonObject.addProperty("message", "Incorrect username or password");
+                response.setStatus(401);
             }
 
             out.write(jsonObject.toString());
