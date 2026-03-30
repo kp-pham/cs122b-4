@@ -1,9 +1,10 @@
 function handleResult(resultData) {
     let itemsList = $("#items-table-body");
+    let rows = "";
 
     resultData["items"].forEach(item => {
-        let row = `
-            <tr>
+        rows += `
+            <tr id="${item['id']}">
                 <td>
                     <a href="single-movie.html?id=${item['id']}">${item['title']}</a>
                 </td>
@@ -27,9 +28,9 @@ function handleResult(resultData) {
                 <td>$${item['subtotal']}</td>
             </tr>
         `;
-
-        itemsList.append(row);
     });
+
+    itemsList.html(rows);
 
     let itemsTable = $("#items-table");
 
@@ -43,14 +44,12 @@ function handleResult(resultData) {
         </tfoot>
     `;
 
+    $("#items-table-footer").remove();
     itemsTable.append(footer);
 }
 
 function submitAddForm(submitFormEvent) {
     submitFormEvent.preventDefault();
-
-    $("#items-table-body").empty();
-    $("#items-table-footer").remove();
 
     let id = $(this).find("input[name='id']").val();
 
