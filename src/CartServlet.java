@@ -126,6 +126,7 @@ public class CartServlet extends HttpServlet {
 
             case "subtract":
                 cart.put(movieId, cart.getOrDefault(movieId, 0) - 1);
+                break;
 
             case "remove":
                 cart.remove(movieId);

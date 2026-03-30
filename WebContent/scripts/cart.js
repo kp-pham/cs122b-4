@@ -61,6 +61,19 @@ function submitAddForm(submitFormEvent) {
     });
 }
 
+function submitSubtractForm(submitFormEvent) {
+    submitFormEvent.preventDefault();
+
+    let id = $(this).find("input[name='id']").val();
+
+    jQuery.ajax({
+        dataType: "json",
+        method: "POST",
+        url: `api/cart?action=subtract&id=${encodeURIComponent(id)}`,
+        success: (resultData) => handleResult(resultData)
+    });
+}
+
 jQuery.ajax({
     dataType: "json",
     method: "GET",
@@ -69,3 +82,4 @@ jQuery.ajax({
 });
 
 $(document).on("submit", ".add-form", submitAddForm);
+$(document).on("submit", ".subtract-form", submitSubtractForm);
