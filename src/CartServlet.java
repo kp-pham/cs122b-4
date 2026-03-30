@@ -42,7 +42,7 @@ public class CartServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
@@ -58,11 +58,11 @@ public class CartServlet extends HttpServlet {
 
             BigDecimal total = BigDecimal.ZERO;
 
-            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-                int movieId = entry.getKey();
+            for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+                String movieId = entry.getKey();
                 int quantity = entry.getValue();
 
-                statement.setInt(1, movieId);
+                statement.setString(1, movieId);
                 ResultSet rs = statement.executeQuery();
 
                 if (!rs.next()) continue;
@@ -110,14 +110,14 @@ public class CartServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
             session.setAttribute("cart", cart);
         }
 
         String action = request.getParameter("action");
-        int movieId = Integer.parseInt(request.getParameter("id"));
+        String movieId = request.getParameter("id");
         int quantity = 0;
 
         if (request.getParameter("quantity") != null) {

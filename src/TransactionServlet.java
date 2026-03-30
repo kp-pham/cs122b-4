@@ -43,7 +43,7 @@ public class TransactionServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
         if (cart == null || cart.isEmpty()) {
             return;
         }
@@ -56,11 +56,11 @@ public class TransactionServlet extends HttpServlet {
             String query = "SELECT price FROM movies WHERE id = ?";
             PreparedStatement statement = conn.prepareStatement(query);
 
-            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-                int movieId = entry.getKey();
+            for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+                String movieId = entry.getKey();
                 int quantity = entry.getValue();
 
-                statement.setInt(1, movieId);
+                statement.setString(1, movieId);
                 ResultSet rs = statement.executeQuery();
 
                 if (!rs.next()) continue;
@@ -95,7 +95,7 @@ public class TransactionServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
         if (cart == null || cart.isEmpty()) {
             return;
         }
@@ -135,12 +135,12 @@ public class TransactionServlet extends HttpServlet {
 
             Date date = new Date(System.currentTimeMillis());
 
-            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
-                int movieId = entry.getKey();
+            for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+                String movieId = entry.getKey();
                 int quantity = entry.getValue();
 
                 statement.setInt(1, customerId);
-                statement.setString(2, movieId.toString());
+                statement.setString(2, movieId);
                 statement.setDate(3, date);
                 statement.setInt(4, quantity);
             }
