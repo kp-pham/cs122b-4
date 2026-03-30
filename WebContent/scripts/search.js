@@ -34,6 +34,12 @@ function handleResult(resultData) {
         }).join(', ')}
                 </td>
                 <td>${(movie['rating'] ?? "N/A")}</td>
+                <td>
+                    <form class="cart-form" method="POST" action="#">
+                        <input type="hidden" name="id" value="${movie['id']}">
+                        <button type="submit" class="rounded p-2 text-white bg-dark">Add</button>
+                    </form>
+                </td>
             </tr>
         `;
 
@@ -68,9 +74,23 @@ function buildUrl() {
     return "api/search?" + params.join("&");
 }
 
+function submitCartForm(submitFormEvent) {
+    submitFormEvent.preventDefault();
+
+    let id = $(this).find("input[name='id']").val();
+
+    jQuery.ajax({
+        dataType: "json",
+        method: "POST",
+        url: `api/cart?action=add&id=${encodeURIComponent(id)}`
+    });
+}
+
 jQuery.ajax({
     dataType: "json",
     method: "GET",
     url: buildUrl(),
     success: (resultData) => handleResult(resultData)
 });
+
+$(document).on("submit", ".cart-form", submitCartForm);
