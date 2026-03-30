@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,6 +130,20 @@ public class TransactionServlet extends HttpServlet {
             String query = "INSERT INTO sales (customerId, movieId, saleDate, quantity) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(query);
 
+            Customer customer = (Customer) session.getAttribute("customer");
+            int customerId = customer.getId();
+
+            Date date = new Date(System.currentTimeMillis());
+
+            for (Map.Entry<Integer, Integer> entry : cart.entrySet()) {
+                int movieId = entry.getKey();
+                int quantity = entry.getValue();
+
+                statement.setInt(1, customerId);
+                statement.setString(2, movieId.toString());
+                statement.setDate(3, date);
+                statement.setInt(4, quantity);
+            }
 
 
         } catch (Exception e) {
