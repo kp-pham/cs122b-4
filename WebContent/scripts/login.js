@@ -1,13 +1,13 @@
-let login_form = $("#login_form");
-let error_message = $("#login_error_message")
+const loginForm = $("#login_form");
+const errorMessage = $("#login_error_message")
 
-function handleLoginResult(resultData) {
-    if (resultData["status"] === "success") {
-        window.location.replace("index.html");
-    } else {
-        error_message.removeClass("d-none");
-        error_message.text(resultData["message"]);
-    }
+function handleLoginSuccess(resultData) {
+    window.location.replace("index.html");
+}
+
+function handleLoginFailure(jqXHR) {
+    errorMessage.removeClass("d-none");
+    errorMessage.text(jqXHR.responseJSON.message ?? "Unexpected error occurred");
 }
 
 function submitLoginForm(formSubmitEvent) {
@@ -16,10 +16,11 @@ function submitLoginForm(formSubmitEvent) {
     $.ajax(
         "api/login", {
             method: "POST",
-            data: login_form.serialize(),
-            success: handleLoginResult
+            data: loginForm.serialize(),
+            success: handleLoginSuccess,
+            error: (jqXHR) => handleLoginFailure(jqXHR)
         }
     );
 }
 
-login_form.submit(submitLoginForm);
+loginForm.submit(submitLoginForm);

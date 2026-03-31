@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("errorMessage", e.getMessage());
+            jsonObject.addProperty("message", e.getMessage());
             out.write(jsonObject.toString());
 
             request.getServletContext().log("Error:", e);
