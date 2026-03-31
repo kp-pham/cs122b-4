@@ -23,3 +23,7 @@
     grid-auto-rows: auto;
     gap: 5px;
 }
+
+#payment {
+    max-width: 500px;
+}

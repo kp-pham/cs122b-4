@@ -10,23 +10,33 @@
               integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <title>Payment</title>
     </head>
-    <body class="d-flex flex-column gap-5 min-vh-100">
+    <body class="d-flex flex-column min-vh-100">
         <div id="nav-placeholder"></div>
 
-        <div id="payment" class="w-100 p-5 rounded shadow-sm">
+        <div id="payment" class="w-50 m-auto p-5 shadow">
             <h2>Payment Information</h2>
             <form id="payment-form" method="POST" action="#" class="d-flex flex-column gap-3">
-                <label for="firstName">First Name: </label>
-                <input name="firstName" type="text" id="firstName" required>
+                <div class="d-flex flex-column">
+                    <label for="firstName">First Name: </label>
+                    <input name="firstName" type="text" id="firstName" required>
+                </div>
 
-                <label for="lastName">Last Name: </label>
-                <input name="lastName" type="text" id="lastName" required>
+                <div class="d-flex flex-column">
+                    <label for="lastName">Last Name: </label>
+                    <input name="lastName" type="text" id="lastName" required>
+                </div>
 
-                <label for="card">Credit Card Number: </label>
-                <input name="card" type="text" id="card" required>
+                <div class="d-flex flex-column">
+                    <label for="card">Credit Card Number: </label>
+                    <input name="card" type="text" id="card" required>
+                </div>
 
-                <label for="expiration">Expiration Date: </label>
-                <input name="expiration" type="text" id="expiration" required>
+                <div class="d-flex flex-column">
+                    <label for="expiration">Expiration Date: </label>
+                    <input name="expiration" type="text" id="expiration" required>
+                </div>
+
+                <button type="submit" class="rounded p-2 text-white bg-dark">Place Order</button>
             </form>
         </div>
 
