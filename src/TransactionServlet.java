@@ -128,6 +128,8 @@ public class TransactionServlet extends HttpServlet {
         }
 
         try (Connection conn = dataSource.getConnection()) {
+            conn.setAutoCommit(false); // Enforce atomicity for transactions
+
             String query = "SELECT * FROM creditcards WHERE id = ? AND firstName = ? AND lastname = ? AND expiration = ?";
 
             PreparedStatement statement = conn.prepareStatement(query);
@@ -163,50 +165,59 @@ public class TransactionServlet extends HttpServlet {
 
             JsonArray jsonArray = new JsonArray();
 
-            for (Map.Entry<String, Integer> entry : cart.entrySet()) {
-                String movieId = entry.getKey();
-                int quantity = entry.getValue();
+            try {
+                for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+                    String movieId = entry.getKey();
+                    int quantity = entry.getValue();
 
-                String selectQuery = "SELECT title, price FROM movies WHERE id = ?";
+                    String selectQuery = "SELECT title, price FROM movies WHERE id = ?";
 
-                PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
-                selectStatement.setString(1, movieId);
+                    PreparedStatement selectStatement = conn.prepareStatement(selectQuery);
+                    selectStatement.setString(1, movieId);
 
-                ResultSet results = selectStatement.executeQuery();
+                    ResultSet results = selectStatement.executeQuery();
 
-                if (!results.next())
-                    continue;
+                    if (!results.next())
+                        continue;
 
-                String title = results.getString("title");
-                BigDecimal price = results.getBigDecimal("price");
+                    String title = results.getString("title");
+                    BigDecimal price = results.getBigDecimal("price");
 
-                BigDecimal subtotal = price.multiply(new BigDecimal(quantity));
-                subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
+                    BigDecimal subtotal = price.multiply(new BigDecimal(quantity));
+                    subtotal = subtotal.setScale(2, RoundingMode.HALF_UP);
 
-                total = total.add(subtotal);
+                    total = total.add(subtotal);
 
-                insertStatement.setInt(1, customerId);
-                insertStatement.setString(2, movieId);
-                insertStatement.setDate(3, date);
-                insertStatement.setInt(4, quantity);
+                    insertStatement.setInt(1, customerId);
+                    insertStatement.setString(2, movieId);
+                    insertStatement.setDate(3, date);
+                    insertStatement.setInt(4, quantity);
 
-                insertStatement.executeUpdate();
-                ResultSet keys = insertStatement.getGeneratedKeys();
+                    insertStatement.executeUpdate(); // Throws SQLException when insertion fails
+                    ResultSet keys = insertStatement.getGeneratedKeys();
 
-                int saleId = keys.getInt(1);
+                    int saleId = keys.getInt(1);
 
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("saleId", saleId);
-                jsonObject.addProperty("movieId", movieId);
-                jsonObject.addProperty("title", title);
-                jsonObject.addProperty("quantity", quantity);
-                jsonObject.addProperty("price", price.setScale(2, RoundingMode.HALF_UP).doubleValue());
-                jsonObject.addProperty("subtotal", subtotal.doubleValue());
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("saleId", saleId);
+                    jsonObject.addProperty("movieId", movieId);
+                    jsonObject.addProperty("title", title);
+                    jsonObject.addProperty("quantity", quantity);
+                    jsonObject.addProperty("price", price.setScale(2, RoundingMode.HALF_UP).doubleValue());
+                    jsonObject.addProperty("subtotal", subtotal.doubleValue());
 
-                jsonArray.add(jsonObject);
+                    jsonArray.add(jsonObject);
+                }
+
+                conn.commit();
+
+            } catch (Exception e) {
+                conn.rollback(); // Sales records not inserted when transaction fails
+                throw e;
+
+            } finally {
+                conn.setAutoCommit(true);
             }
-
-            insertStatement.executeBatch();
 
             JsonObject jsonObject = new JsonObject();
             jsonObject.add("sales", jsonArray);
