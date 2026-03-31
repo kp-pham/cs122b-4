@@ -11,7 +11,7 @@ function handleSuccess(resultData) {
 
 function handleFailure(jqXHR) {
     errorMessage.removeClass("d-none");
-    errorMessage.text(jqXHR.responseJSON.message);
+    errorMessage.text(jqXHR.responseJSON.message ?? "Unexpected error occurred");
 }
 
 function submitPaymentForm(formSubmitEvent) {
