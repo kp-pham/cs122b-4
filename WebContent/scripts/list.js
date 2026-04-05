@@ -56,6 +56,20 @@ function buildUrl() {
         : `api/browse?prefix=${encodeURIComponent(prefix)}&sort=${encodeURIComponent(sort)}`;
 }
 
+function isValid(state) {
+    return state && (state.type === "browse" || state.type === "search");
+}
+
+function showResults() {
+    let state = JSON.parse(sessionStorage.getItem("movieListState"));
+
+    if (isValid(state)) {
+
+    } else {
+
+    }
+}
+
 function submitCartForm(submitFormEvent) {
     submitFormEvent.preventDefault();
 
