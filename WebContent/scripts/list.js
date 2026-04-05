@@ -66,8 +66,6 @@ function showResults() {
     if (isValid(state)) {
 
     } else {
-        // Handle constructing state with only non-null attributes
-
         const genre = getParameterByName("genre");
         const prefix = getParameterByName("prefix");
         const sort = getParameterByName("sort") || "title-asc-rating-desc";
@@ -95,6 +93,18 @@ function showResults() {
         sessionStorage.setItem("movieListState", JSON.stringify(state));
 
         const params = new URLSearchParams();
+        Object.entries(state).forEach(([key, value]) => {
+            if (key !== "type") {
+                params.append(key, value);
+            }
+        });
+
+        jQuery.ajax({
+            dataType: "json",
+            method: "GET",
+            url: `api/${state["type"]}?${params.toString()}`,
+            success: (resultData) => handleResult(resultData)
+        });
     }
 }
 
@@ -110,12 +120,12 @@ function submitCartForm(submitFormEvent) {
     });
 }
 
-jQuery.ajax({
-    dataType: "json",
-    method: "GET",
-    url: buildUrl(),
-    success: (resultData) => handleResult(resultData)
-});
+// jQuery.ajax({
+//     dataType: "json",
+//     method: "GET",
+//     url: buildUrl(),
+//     success: (resultData) => handleResult(resultData)
+// });
 
-$("#options-form").submit(submitOptionsForm);
+// $("#options-form").submit(submitOptionsForm);
 $(document).on("submit", ".cart-form", submitCartForm);
