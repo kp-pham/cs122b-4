@@ -72,6 +72,10 @@ function showResults() {
     if (hasSearchParams()) {
         const genre = getParameterByName("genre");
         const prefix = getParameterByName("prefix");
+        const title = getParameterByName("title");
+        const year = getParameterByName("year");
+        const director = getParameterByName("director");
+        const star = getParameterByName("star");
         const sort = getParameterByName("sort") || "title-asc-rating-desc";
         const page = getParameterByName("page") || 1;
         const offset = getParameterByName("offset") || 25;
@@ -80,20 +84,29 @@ function showResults() {
             state = {
                 type: "browse",
                 genre: genre,
-                page: page,
                 sort: sort,
+                page: page,
                 offset: offset
             }
         } else if (prefix != null) {
             state = {
                 type: "browse",
                 prefix: prefix,
-                page: page,
                 sort: sort,
+                page: page,
                 offset: offset
             }
         } else {
-            // State for search
+            state = {
+                type: "search",
+                title: title,
+                year: year,
+                director: director,
+                star: star,
+                sort: sort,
+                page: page,
+                offset: offset
+            }
         }
 
         sessionStorage.setItem("movieListState", JSON.stringify(state));
@@ -106,7 +119,7 @@ function showResults() {
     }
     const params = new URLSearchParams();
     Object.entries(state).forEach(([key, value]) => {
-        if (key !== "type") {
+        if (key !== "type" && value != null) {
             params.append(key, value);
         }
     });
