@@ -47,7 +47,7 @@ function submitSearchForm(formSubmitEvent) {
         params.push(`star=${encodeURIComponent(star)}`);
     }
 
-    window.location.href = "search.html?" + params.join("&");
+    window.location.href = "list.html?" + params.join("&");
 }
 
 showPrefixes();
