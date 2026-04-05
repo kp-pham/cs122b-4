@@ -63,9 +63,7 @@ function isValid(state) {
 function showResults() {
     let state = JSON.parse(sessionStorage.getItem("movieListState"));
 
-    if (isValid(state)) {
-
-    } else {
+    if (!isValid(state)) {
         const genre = getParameterByName("genre");
         const prefix = getParameterByName("prefix");
         const sort = getParameterByName("sort") || "title-asc-rating-desc";
@@ -91,21 +89,21 @@ function showResults() {
         }
 
         sessionStorage.setItem("movieListState", JSON.stringify(state));
-
-        const params = new URLSearchParams();
-        Object.entries(state).forEach(([key, value]) => {
-            if (key !== "type") {
-                params.append(key, value);
-            }
-        });
-
-        jQuery.ajax({
-            dataType: "json",
-            method: "GET",
-            url: `api/${state["type"]}?${params.toString()}`,
-            success: (resultData) => handleResult(resultData)
-        });
     }
+
+    const params = new URLSearchParams();
+    Object.entries(state).forEach(([key, value]) => {
+        if (key !== "type") {
+            params.append(key, value);
+        }
+    });
+
+    jQuery.ajax({
+        dataType: "json",
+        method: "GET",
+        url: `api/${state["type"]}?${params.toString()}`,
+        success: (resultData) => handleResult(resultData)
+    });
 }
 
 function submitCartForm(submitFormEvent) {
@@ -120,12 +118,7 @@ function submitCartForm(submitFormEvent) {
     });
 }
 
-// jQuery.ajax({
-//     dataType: "json",
-//     method: "GET",
-//     url: buildUrl(),
-//     success: (resultData) => handleResult(resultData)
-// });
+showResults();
 
 // $("#options-form").submit(submitOptionsForm);
 $(document).on("submit", ".cart-form", submitCartForm);
