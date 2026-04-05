@@ -6,7 +6,7 @@ function handleResult(resultData) {
 }
 
 function handleSuccess(resultData) {
-    sessionStorage.setItem("sales", resultData);
+    sessionStorage.setItem("sales", JSON.stringify(resultData));
     window.location.href = "confirmation.html";
 }
 

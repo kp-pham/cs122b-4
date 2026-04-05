@@ -1,18 +1,18 @@
 function showOrderDetails() {
     let recordsList = $("#sales-table-body");
 
-    const resultData = sessionStorage.getItem("sales");
+    const resultData = JSON.parse(sessionStorage.getItem("sales"));
 
     resultData["sales"].forEach(record => {
         let row = `
             <tr>
-                <td>record["saleId"]</td>
+                <td>${record["saleId"]}</td>
                 <td>
                     <a href="single-movie.html?=${record['movieId']}">${record["title"]}</a>
                 </td>
                 <td>${record["quantity"]}</td>
-                <td>${record["price"]}</td>
-                <td>${record["subtotal"]}</td>
+                <td>$${record["price"]}</td>
+                <td>$${record["subtotal"]}</td>
             </tr>
         `;
 
