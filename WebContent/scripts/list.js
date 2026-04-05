@@ -144,7 +144,19 @@ function submitCartForm(submitFormEvent) {
     });
 }
 
+function submitOptionsForm(formSubmitEvent) {
+    formSubmitEvent.preventDefault();
+
+    const params = new URLSearchParams(window.location.search);
+    const sort = $("select[name=sort]").val();
+    params.set("sort", sort);
+
+    // Rerender page without refresh
+    // Use sessions instead of browser history
+    window.location.href = `browse.html?${params.toString()}`;
+}
+
 showResults();
 
-// $("#options-form").submit(submitOptionsForm);
+$("#options-form").submit(submitOptionsForm);
 $(document).on("submit", ".cart-form", submitCartForm);
