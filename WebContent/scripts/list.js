@@ -153,7 +153,7 @@ function submitOptionsForm(formSubmitEvent) {
 
     // Rerender page without refresh
     // Use sessions instead of browser history
-    window.location.href = `browse.html?${params.toString()}`;
+    window.location.href = `list.html?${params.toString()}`;
 }
 
 showResults();
