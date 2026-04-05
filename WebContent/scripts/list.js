@@ -56,41 +56,54 @@ function buildUrl() {
         : `api/browse?prefix=${encodeURIComponent(prefix)}&sort=${encodeURIComponent(sort)}`;
 }
 
+function hasSearchParams() {
+    return window.location.search.length > 0;
+}
+
 function isValid(state) {
     return state && (state.type === "browse" || state.type === "search");
 }
 
 function showResults() {
-    let state = JSON.parse(sessionStorage.getItem("movieListState"));
+    let state = null;
 
-    if (!isValid(state)) {
+    let storedState = JSON.parse(sessionStorage.getItem("movieListState"));
+
+    if (hasSearchParams()) {
         const genre = getParameterByName("genre");
         const prefix = getParameterByName("prefix");
         const sort = getParameterByName("sort") || "title-asc-rating-desc";
+        const page = getParameterByName("page") || 1;
+        const offset = getParameterByName("offset") || 25;
 
         if (genre != null) {
             state = {
                 type: "browse",
                 genre: genre,
-                page: 1,
+                page: page,
                 sort: sort,
-                itemsPerPage: 25
+                offset: offset
             }
         } else if (prefix != null) {
             state = {
                 type: "browse",
                 prefix: prefix,
-                page: 1,
+                page: page,
                 sort: sort,
-                itemsPerPage: 25
+                offset: offset
             }
         } else {
             // State for search
         }
 
         sessionStorage.setItem("movieListState", JSON.stringify(state));
-    }
 
+    } else if (isValid(storedState)) {
+        state = storedState;
+
+    } else {
+        return;
+    }
     const params = new URLSearchParams();
     Object.entries(state).forEach(([key, value]) => {
         if (key !== "type") {
