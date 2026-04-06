@@ -19,9 +19,11 @@ function getParameterByName(target) {
 }
 
 function handleResult(resultData) {
-    const sort = getParameterByName("sort") || "title-asc-rating-desc";
-    const page = Number(getParameterByName("page")) || 1;
-    const pageSize = getParameterByName("pageSize") || 25;
+    let state = JSON.parse(sessionStorage.getItem("movieListState"));
+
+    const sort = state["sort"];
+    const page = state["page"];
+    const pageSize = state["pageSize"];
 
     const sortDropdown = jQuery("#sort");
     sortDropdown.val(sort);
