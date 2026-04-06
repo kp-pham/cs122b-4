@@ -22,8 +22,8 @@ function handleResult(resultData) {
     let state = JSON.parse(sessionStorage.getItem("movieListState"));
 
     const sort = state["sort"];
-    const page = state["page"];
-    const pageSize = state["pageSize"];
+    const page = Number(state["page"]);
+    const pageSize = Number(state["pageSize"]);
 
     const sortDropdown = jQuery("#sort");
     sortDropdown.val(sort);
@@ -188,7 +188,15 @@ function submitCartForm(submitFormEvent) {
 function submitOptionsForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
-    const params = new URLSearchParams(window.location.search);
+    const state = JSON.parse(sessionStorage.getItem("movieListState"));
+    const params = new URLSearchParams();
+
+    Object.entries(state).forEach(([key, value]) => {
+        if (key !== "type") {
+            params.append(key, value);
+        }
+    });
+
     const sort = $("select[name=sort]").val();
     params.set("sort", sort);
 
@@ -198,7 +206,15 @@ function submitOptionsForm(formSubmitEvent) {
 function submitPageForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
-    const params = new URLSearchParams(window.location.search);
+    const state = JSON.parse(sessionStorage.getItem("movieListState"));
+    const params = new URLSearchParams();
+
+    Object.entries(state).forEach(([key, value]) => {
+        if (key !== "type") {
+            params.append(key, value);
+        }
+    });
+
     const page = $(this).find("input[id='page']").val();
     params.set("page", page);
 
