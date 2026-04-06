@@ -72,7 +72,7 @@ function submitSubtractForm(submitFormEvent) {
         method: "POST",
         url: `api/cart?action=subtract&id=${encodeURIComponent(id)}`,
         success: (resultData) => handleResult(resultData)
-    });j
+    });
 }
 
 function submitRemoveForm(submitFormEvent) {

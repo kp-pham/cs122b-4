@@ -17,6 +17,13 @@ function getParameterByName(target) {
 }
 
 function handleResult(resultData) {
+    const sort = getParameterByName("sort") || "title-asc-rating-desc";
+    const page = getParameterByName("page") || 1;
+    const offset = getParameterByName("offset") || 1;
+
+    const sortDropdown = $("#sort");
+    sortDropdown.val(sort);
+
     let movieTable = jQuery("#movie-table-body");
 
     resultData.forEach(movie => {
@@ -45,15 +52,6 @@ function handleResult(resultData) {
 
         movieTable.append(row);
     });
-}
-
-function buildUrl() {
-    let genre = getParameterByName("genre");
-    let prefix = getParameterByName("prefix");
-    let sort = getParameterByName("sort") || "title-asc-rating-desc";
-
-    return (genre != null) ? `api/browse?genre=${encodeURIComponent(genre)}&sort=${encodeURIComponent(sort)}`
-        : `api/browse?prefix=${encodeURIComponent(prefix)}&sort=${encodeURIComponent(sort)}`;
 }
 
 function hasSearchParams() {
@@ -151,8 +149,6 @@ function submitOptionsForm(formSubmitEvent) {
     const sort = $("select[name=sort]").val();
     params.set("sort", sort);
 
-    // Rerender page without refresh
-    // Use sessions instead of browser history
     window.location.href = `list.html?${params.toString()}`;
 }
 
