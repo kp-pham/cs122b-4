@@ -26,7 +26,7 @@ function handleResult(resultData) {
 
     let movieTable = jQuery("#movie-table-body");
 
-    resultData.forEach(movie => {
+    resultData["results"].forEach(movie => {
         let row = `
             <tr>
                 <td>
@@ -65,7 +65,8 @@ function handleResult(resultData) {
         </form>
         <form id="next-page" method="GET" action="#" class="page-form">
             <input type="hidden" id="page" value="${page + 1}">
-            <button type="submit" class="rounded text-white bg-dark">\></button>
+            <button type="submit" class="rounded text-white bg-dark"
+                    ${resultData["lastPage"] ? "disabled" : ""}>\></button>
         </form>
     `);
 }

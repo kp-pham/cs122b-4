@@ -175,7 +175,8 @@ public class BrowseServlet extends HttpServlet {
                 statement.setString(1, parameter);
             }
 
-            statement.setInt(2, pageSize);
+            // Retrieve additional row to determine whether there is another page
+            statement.setInt(2, pageSize + 1);
             statement.setInt(3, offset);
 
             ResultSet rs = statement.executeQuery();
@@ -200,10 +201,22 @@ public class BrowseServlet extends HttpServlet {
                 jsonArray.add(jsonObject);
             }
 
+            JsonObject jsonObject = new JsonObject();
+
+            if (jsonArray.size() > pageSize) {
+                jsonObject.addProperty("lastPage", false);
+                jsonArray.remove(jsonArray.size() - 1);
+
+            } else {
+                jsonObject.addProperty("lastPage", true);
+            }
+
+            jsonObject.add("results", jsonArray);
+
             rs.close();
             statement.close();
 
-            out.write(jsonArray.toString());
+            out.write(jsonObject.toString());
             response.setStatus(200);
 
         } catch (Exception e) {
