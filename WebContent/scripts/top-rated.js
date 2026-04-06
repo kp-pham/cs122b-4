@@ -1,3 +1,5 @@
+const alertContainer = $("#alert-container")[0];
+
 function handleResult(resultData) {
     let movieTable = jQuery("#movie-table-body");
 
@@ -29,15 +31,35 @@ function handleResult(resultData) {
     });
 }
 
+function showSuccess() {
+    alertContainer.insertAdjacentHTML("afterbegin", `
+        <div class="alert alert-success alert-dismissible fade show position-absolute top-0 w-100 m-0 rounded-0" role="alert">
+            Successfully added movie to cart!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `);
+}
+
+function showFailure() {
+    alertContainer.insertAdjacentHTML("afterbegin", `
+        <div class="alert alert-warning alert-dismissible fade show position-absolute top-0 w-100 m-0 rounded-0" role="alert">
+            Something went wrong, please try again.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `);
+}
+
 function submitCartForm(submitFormEvent) {
     submitFormEvent.preventDefault();
 
     let id = $(this).find("input[name='id']").val();
 
     jQuery.ajax({
-       dataType: "json",
-       method: "POST",
-       url: `api/cart?action=add&id=${encodeURIComponent(id)}`
+        dataType: "json",
+        method: "POST",
+        url: `api/cart?action=add&id=${encodeURIComponent(id)}`,
+        success: showSuccess,
+        failure: showFailure
     });
 }
 
@@ -48,4 +70,5 @@ jQuery.ajax({
    success: (resultData) => handleResult(resultData)
 });
 
+$
 $(document).on("submit", ".cart-form", submitCartForm);

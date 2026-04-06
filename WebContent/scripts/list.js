@@ -224,5 +224,5 @@ function submitPageForm(formSubmitEvent) {
 showResults();
 
 $("#options-form").submit(submitOptionsForm);
-$(document).on("submit", ".page-form", submitPageForm)
+$(document).on("submit", ".page-form", submitPageForm);
 $(document).on("submit", ".cart-form", submitCartForm);
