@@ -16,9 +16,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Set;
 
 @WebServlet(name = "BrowseServlet", urlPatterns = "/api/browse")
 public class BrowseServlet extends HttpServlet {
@@ -59,15 +57,23 @@ public class BrowseServlet extends HttpServlet {
         int pageSize = DEFAULT_PAGE_SIZE;
 
         try {
-            if (page != null)
+            if (page != null && !page.isEmpty())
                 pageNumber = Integer.parseInt(page);
 
-            if (size != null)
+            if (size != null && !page.isEmpty())
                 pageSize = Integer.parseInt(size);
 
         } catch (NumberFormatException e) {
             pageNumber = DEFAULT_PAGE_NUMBER;
             pageSize = DEFAULT_PAGE_SIZE;
+
+        } finally {
+            if (pageNumber < 1)
+                pageNumber = DEFAULT_PAGE_NUMBER;
+
+            Set<Integer> allowedSizes = Set.of(10, 25, 50, 100);
+            if (!allowedSizes.contains(pageSize))
+                pageSize = DEFAULT_PAGE_SIZE;
         }
 
         int offset = (pageNumber - 1) * pageSize;
