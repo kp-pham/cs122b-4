@@ -26,7 +26,7 @@ function handleResult(resultData) {
     const sortDropdown = jQuery("#sort");
     sortDropdown.val(sort);
 
-    let pageSizeDropdown = jQuery("#page-size");
+    let pageSizeDropdown = jQuery("#pageSize");
     pageSizeDropdown.val(pageSize);
 
     let pageLookup = jQuery("#page-lookup");
@@ -96,7 +96,7 @@ function showResults() {
         const star = getParameterByName("star");
         const sort = getParameterByName("sort") || "title-asc-rating-desc";
         const page = getParameterByName("page") || 1;
-        const offset = getParameterByName("offset") || 25;
+        const pageSize = getParameterByName("pageSize") || 25;
 
         if (genre != null) {
             state = {
@@ -104,7 +104,7 @@ function showResults() {
                 genre: genre,
                 sort: sort,
                 page: page,
-                offset: offset
+                pageSize: pageSize
             }
         } else if (prefix != null) {
             state = {
@@ -112,7 +112,7 @@ function showResults() {
                 prefix: prefix,
                 sort: sort,
                 page: page,
-                offset: offset
+                pageSize: pageSize
             }
         } else {
             state = {
@@ -123,7 +123,7 @@ function showResults() {
                 star: star,
                 sort: sort,
                 page: page,
-                offset: offset
+                pageSize: pageSize
             }
         }
 
