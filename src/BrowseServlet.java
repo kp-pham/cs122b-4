@@ -49,6 +49,8 @@ public class BrowseServlet extends HttpServlet {
         String genre = request.getParameter("genre");
         String prefix = request.getParameter("prefix");
         String sort = request.getParameter("sort");
+        String page = request.getParameter("page");
+        String offset = request.getParameter("offset");
 
         PrintWriter out = response.getWriter();
 

@@ -16,6 +16,14 @@
         <div id="movie-list" class="p-4">
             <h3>Results</h3>
             <form id="options-form" method="GET" action="#">
+                <label for="offset">Movies Per Page: </label>
+                <select id="offset" name="offset">
+                    <option value=10>10</option>
+                    <option value=25>25</option>
+                    <option value=50>50</option>
+                    <option value=100>100</option>
+                </select>
+
                 <label for="sort">Sort by: </label>
                 <select id="sort" name="sort">
                     <option value="title-asc-rating-desc">Title ↑ Rating ↓</option>
@@ -27,6 +35,7 @@
                     <option value="rating-asc-title-asc">Rating ↑ Title ↑</option>
                     <option value="title-desc-rating-desc">Rating ↓ Title ↓</option>
                 </select>
+
                 <button type="submit" class="rounded text-white bg-dark">Apply Changes</button>
             </form>
             <table id="movie-table" class="table table-striped">
