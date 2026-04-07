@@ -75,7 +75,7 @@ CREATE TABLE ratings(
     FOREIGN KEY (movieId) REFERENCES movies(id)
 );
 
-CREATE INDEX index_movie_ratings
+CREATE INDEX index_top_rated
     ON ratings (rating DESC, movieId);
 
 CREATE INDEX index_movie_genres
