@@ -146,8 +146,7 @@ public class SearchServlet extends HttpServlet {
                 params.add("%" + trimmedStar + "%");
             }
 
-            query += "GROUP BY M.id, M.title, M.year, M.director, R.rating " +
-                     "ORDER BY R.rating DESC ";
+            query += "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
 
             switch(sort) {
                 case SORT_TITLE_DESC_RATING_ASC:
@@ -175,7 +174,7 @@ public class SearchServlet extends HttpServlet {
                     break;
 
                 case SORT_RATING_DESC_TITLE_DESC:
-                    query += "ORDER BY R.rating DESC, M.title DESC";
+                    query += "ORDER BY R.rating DESC, M.title DESC ";
                     break;
 
                 default:
@@ -185,8 +184,8 @@ public class SearchServlet extends HttpServlet {
 
             query += "LIMIT ? OFFSET ?";
 
-            params.add(pageNumber);
-            params.add(pageSize + 1);
+            params.add(pageNumber + 1);
+            params.add(pageSize);
 
             PreparedStatement statement = conn.prepareStatement(query);
             for (int i = 0; i < params.size(); ++i) {
