@@ -78,11 +78,17 @@ CREATE TABLE ratings(
 CREATE INDEX index_top_rated
     ON ratings (rating DESC, movieId);
 
-CREATE INDEX index_movie_genres
+CREATE INDEX index_movies_genres
     ON genres_in_movies (movieId, genreId);
 
-CREATE INDEX index_movie_stars
+CREATE INDEX index_genres_movies
+    ON genres_in_movies(genreId, movieId);
+
+CREATE INDEX index_movies_stars
     ON stars_in_movies (movieId, starId);
+
+CREATE INDEX index_stars_movies
+    ON stars_in_movies (starId, movieId);
 
 CREATE INDEX index_movie_titles
     ON movies(title);
