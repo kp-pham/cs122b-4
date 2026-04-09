@@ -36,6 +36,8 @@ public class BrowseServlet extends HttpServlet {
     private static final int DEFAULT_PAGE_NUMBER = 1;
     private static final int DEFAULT_PAGE_SIZE = 25;
 
+    Set<Integer> ALLOWED_PAGE_SIZES = Set.of(10, 25, 50, 100);
+
     public void init(ServletConfig config) {
         try {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
@@ -77,14 +79,22 @@ public class BrowseServlet extends HttpServlet {
         int pageNumber = DEFAULT_PAGE_NUMBER;
         int pageSize = DEFAULT_PAGE_SIZE;
 
-
-
         try {
-            if (hasPage)
+            if (hasPage) {
                 pageNumber = Integer.parseInt(page);
 
-            if (hasSize)
+                if (pageNumber < 1) {
+                    throw new Exception("Please provide a valid page number");
+                }
+            }
+
+            if (hasSize) {
                 pageSize = Integer.parseInt(size);
+
+                if (!ALLOWED_PAGE_SIZES.contains(pageSize)) {
+                    throw new Exception("Please provide a valid page size");
+                }
+            }
 
         } catch (Exception E) {
             JsonObject jsonObject = new JsonObject();
@@ -94,26 +104,6 @@ public class BrowseServlet extends HttpServlet {
             response.setStatus(400);
             return;
         }
-
-//        try {
-//            if (page != null && !page.isEmpty())
-//                pageNumber = Integer.parseInt(page);
-//
-//            if (size != null && !size.isEmpty())
-//                pageSize = Integer.parseInt(size);
-//
-//        } catch (NumberFormatException e) {
-//            pageNumber = DEFAULT_PAGE_NUMBER;
-//            pageSize = DEFAULT_PAGE_SIZE;
-//
-//        } finally {
-//            if (pageNumber < 1)
-//                pageNumber = DEFAULT_PAGE_NUMBER;
-//
-//            Set<Integer> allowedSizes = Set.of(10, 25, 50, 100);
-//            if (!allowedSizes.contains(pageSize))
-//                pageSize = DEFAULT_PAGE_SIZE;
-//        }
 
         int offset = (pageNumber - 1) * pageSize;
 
