@@ -55,9 +55,13 @@ public class BrowseServlet extends HttpServlet {
 
         String trimmedGenre = (genre == null) ? null : genre.trim();
         String trimmedPrefix = (prefix == null) ? null : prefix.trim();
+        String trimmedPage = (prefix == null) ? null : page.trim();
+        String trimmedSize = (size == null) ? null : size.trim();
 
         boolean hasGenre = (trimmedGenre != null && !trimmedGenre.isEmpty());
         boolean hasPrefix = (trimmedPrefix != null && !trimmedPrefix.isEmpty());
+        boolean hasPage = (trimmedPage != null && !trimmedPage.isEmpty());
+        boolean hasSize = (trimmedSize != null && !trimmedSize.isEmpty());
 
         PrintWriter out = response.getWriter();
 
@@ -73,25 +77,43 @@ public class BrowseServlet extends HttpServlet {
         int pageNumber = DEFAULT_PAGE_NUMBER;
         int pageSize = DEFAULT_PAGE_SIZE;
 
+
+
         try {
-            if (page != null && !page.isEmpty())
+            if (hasPage)
                 pageNumber = Integer.parseInt(page);
 
-            if (size != null && !size.isEmpty())
+            if (hasSize)
                 pageSize = Integer.parseInt(size);
 
-        } catch (NumberFormatException e) {
-            pageNumber = DEFAULT_PAGE_NUMBER;
-            pageSize = DEFAULT_PAGE_SIZE;
+        } catch (Exception E) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", "Please provide valid page number and size");
+            out.write(jsonObject.toString());
 
-        } finally {
-            if (pageNumber < 1)
-                pageNumber = DEFAULT_PAGE_NUMBER;
-
-            Set<Integer> allowedSizes = Set.of(10, 25, 50, 100);
-            if (!allowedSizes.contains(pageSize))
-                pageSize = DEFAULT_PAGE_SIZE;
+            response.setStatus(400);
+            return;
         }
+
+//        try {
+//            if (page != null && !page.isEmpty())
+//                pageNumber = Integer.parseInt(page);
+//
+//            if (size != null && !size.isEmpty())
+//                pageSize = Integer.parseInt(size);
+//
+//        } catch (NumberFormatException e) {
+//            pageNumber = DEFAULT_PAGE_NUMBER;
+//            pageSize = DEFAULT_PAGE_SIZE;
+//
+//        } finally {
+//            if (pageNumber < 1)
+//                pageNumber = DEFAULT_PAGE_NUMBER;
+//
+//            Set<Integer> allowedSizes = Set.of(10, 25, 50, 100);
+//            if (!allowedSizes.contains(pageSize))
+//                pageSize = DEFAULT_PAGE_SIZE;
+//        }
 
         int offset = (pageNumber - 1) * pageSize;
 
