@@ -22,10 +22,17 @@ public class RecaptchaVerifyUtils {
 
         conn.setDoOutput(true);
 
-        OutputStream outStream = conn.getOutputStream();
-        outStream.write(params.getBytes());
+        OutputStream outputStream = conn.getOutputStream();
+        outputStream.write(params.getBytes());
 
-        outStream.flush();
-        outStream.close();
+        outputStream.flush();
+        outputStream.close();
+
+        InputStream inputStream = conn.getInputStream();
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+        JsonObject jsonObject = new Gson().fromJson(inputStreamReader, JsonObject.class);
+
+        inputStreamReader.close();
     }
 }
