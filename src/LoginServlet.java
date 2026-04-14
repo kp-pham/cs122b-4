@@ -18,6 +18,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import org.jasypt.util.password.PasswordEncryptor;
+import org.jasypt.util.password.StrongPasswordEncryptor;
+
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/api/login")
 public class LoginServlet extends HttpServlet {
@@ -66,7 +69,9 @@ public class LoginServlet extends HttpServlet {
 
             JsonObject jsonObject = new JsonObject();
 
-            if (rs.next() && password.equals(rs.getString("password"))) {
+            PasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
+
+            if (rs.next() && passwordEncryptor.checkPassword(password, rs.getString("password"))) {
                 int id = rs.getInt("id");
                 request.getSession().setAttribute("customer", new Customer(id, email));
                 jsonObject.addProperty("status", "success");
