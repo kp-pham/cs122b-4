@@ -21,5 +21,11 @@ public class RecaptchaVerifyUtils {
         String params = "secret=" + System.getenv("SECRET_KEY") + "&response=" + gRecaptchaResponse;
 
         conn.setDoOutput(true);
+
+        OutputStream outStream = conn.getOutputStream();
+        outStream.write(params.getBytes());
+
+        outStream.flush();
+        outStream.close();
     }
 }
