@@ -1,5 +1,3 @@
-package customers;
-
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-@WebFilter(filterName = "customers.LoginFilter", urlPatterns="/*")
+@WebFilter(filterName = "LoginFilter", urlPatterns="/*")
 public class LoginFilter implements Filter {
     private final ArrayList<String> allowedURIs = new ArrayList<>();
 
@@ -36,6 +34,7 @@ public class LoginFilter implements Filter {
     public void init(FilterConfig fConfig) {
         allowedURIs.add("login.html");
         allowedURIs.add("login.js");
+        allowedURIs.add("_dashboard/login.html");
         allowedURIs.add("api/customers/login");
         allowedURIs.add("api/employees/login");
 

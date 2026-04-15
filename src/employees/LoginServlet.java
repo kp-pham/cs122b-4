@@ -63,7 +63,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT fullname, password FROM employees WHERE email = ?";
+            String query = "SELECT fullName, password FROM employees WHERE email = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();

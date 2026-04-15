@@ -1,7 +1,9 @@
 const loginForm = $("#login_form");
-const errorMessage = $("#login_error_message")
+const errorMessage = $("#login_error_message");
 
-function handleLoginSuccess(resultData) {
+const baseURL = window.location.origin + '/' + window.location.pathname.split('/')[1];
+
+function handleLoginSuccess() {
     window.location.replace("index.html");
 }
 
@@ -14,7 +16,7 @@ function submitLoginForm(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
     $.ajax(
-        "api/employees/login", {
+        baseURL + "/api/employees/login", {
             method: "POST",
             data: loginForm.serialize(),
             success: handleLoginSuccess,
