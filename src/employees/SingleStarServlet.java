@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 @WebServlet(name = "employees.SingleStarServlet", urlPatterns = "/api/employees/star")
 public class SingleStarServlet extends HttpServlet {
@@ -51,6 +53,31 @@ public class SingleStarServlet extends HttpServlet {
             return;
         }
 
+        try (Connection conn = dataSource.getConnection()) {
+            String query = "INSERT INTO (id, name, birthYear) VALUES (?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(query);
 
+            statement.setString(1, id);
+            statement.setString(2, name);
+
+            if (birthYear == null || birthYear.isEmpty()) {
+                statement.setNull(3, Types.INTEGER);
+            } else {
+                statement.setInt(3, birthYear);
+            }
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
+
+            request.getServletContext().log("Error:", e);
+            response.setStatus(500);
+
+        } finally {
+            out.close();
+        }
     }
 }
