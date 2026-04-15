@@ -23,7 +23,7 @@ function handleResult(resultData) {
                             return `
                                 <tr>
                                     <td>${column["name"]}</td>
-                                    <td>${column["type"]}</td> 
+                                    <td>${column["type"].toUpperCase()}</td> 
                                 </tr>      
                             `;
                         }).join("")}
