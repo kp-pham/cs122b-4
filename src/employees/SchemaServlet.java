@@ -2,6 +2,7 @@ package employees;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -19,6 +20,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.ArrayList;
 
+@WebServlet(name = "employees.SchemaServlet", urlPatterns="/api/employees/schema")
 public class SchemaServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -38,7 +40,8 @@ public class SchemaServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT TABLE_NAME, JSON_ARRAYAGG(JSON_OBJECT('column', COLUMN_NAME, 'type', DATA_TYPE)) " +
+            String query = "SELECT TABLE_NAME, " +
+                           "JSON_ARRAYAGG(JSON_OBJECT('name', COLUMN_NAME, 'type', DATA_TYPE)) AS columns " +
                            "FROM INFORMATION_SCHEMA.COLUMNS " +
                            "WHERE TABLE_SCHEMA = ? " +
                            "ORDER BY TABLE_NAME";
@@ -53,8 +56,16 @@ public class SchemaServlet extends HttpServlet {
             while (rs.next()) {
                 JsonObject jsonObject = new JsonObject();
 
-                jsonObject.addProperty("tableName", rs.getString("TABLE_NAME"));
+                jsonObject.addProperty("name", rs.getString("TABLE_NAME"));
+
+                JsonArray columns = JsonParser.parseString(rs.getString("columns")).getAsJsonArray();
+                jsonObject.add("columns", columns);
+
+                jsonArray.add(jsonObject);
             }
+
+            out.write(jsonArray.toString());
+            response.setStatus(200);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
