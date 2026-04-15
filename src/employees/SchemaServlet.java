@@ -38,7 +38,7 @@ public class SchemaServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE " +
+            String query = "SELECT TABLE_NAME, JSON_ARRAYAGG(JSON_OBJECT('column', COLUMN_NAME, 'type', DATA_TYPE)) " +
                            "FROM INFORMATION_SCHEMA.COLUMNS " +
                            "WHERE TABLE_SCHEMA = ? " +
                            "ORDER BY TABLE_NAME";
