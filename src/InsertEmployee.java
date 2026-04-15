@@ -30,5 +30,13 @@ public class InsertEmployee {
 
         System.out.print("Full Name: ");
         String fullName = scanner.nextLine();
+
+        statement.setString(1, email);
+        statement.setString(2, encryptedPassword);
+        statement.setString(3, fullName);
+
+        int result = statement.executeUpdate();
+
+        System.out.println("adding new employee completed, " + result + " row(s) affected");
     }
 }
