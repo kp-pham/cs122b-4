@@ -21,7 +21,7 @@ function handleResult(resultData) {
                                 <td>${column["type"]}</td> 
                             </tr>      
                         `;
-                    })}
+                    }).join("")}
                 </tbody>
             </table>
         `;
