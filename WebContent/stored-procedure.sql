@@ -5,19 +5,19 @@ CREATE PROCEDURE add_movie (
     IN year INTEGER,
     IN director VARCHAR(100),
     IN star_name VARCHAR(100),
-    IN genre_name VARCHAR(32),
+    IN genre_name VARCHAR(32)
 )
 BEGIN
-    DECLARe movie_id VARCHAR(10);
+    DECLARE movie_id VARCHAR(10);
     DECLARE star_id VARCHAR(10);
     DECLARE genre_id INTEGER;
 
-    SET movie_id = CALL get_next_movie_id();
+    SET movie_id = CALL get_next_movie_id(movie_id);
 
     IF star_name IS NOT NULL THEN
         SELECT id INTO star_id FROM stars WHERE name = star_name LIMIT 1;
         IF star_id IS NULL THEN
-           SET star_id = CALL get_next_star_id();
+           SET star_id = CALL get_next_star_id(star_id);
            INSERT INTO stars (id, name, birthYear) VALUES ( star_id, star_name, NULL);
         END IF;
 
@@ -27,13 +27,15 @@ BEGIN
     IF genre_name IS NOT NULL THEN
         SELECT id INTO genre_id FROM genres WHERE name = genre_name LIMIT 1;
 
-        IF NOT EXISTS (SELECT 1 FROM genres WHERE name = genre_name) THEN
-           SET genre_id = CALL get_next_genre_id();
+        IF genre_id IS NOT NULL THEN
+           SET genre_id = CALL get_next_genre_id(genre_id);
            INSERT INTO genres (id, name) VALUES (genre_id, genre_name);
         END IF;
 
-        INSERT INTO genres_in_movies(genreId, movieId) VALUES (genre_id, movie_id);
+        INSERT INTO genres_in_movies (genreId, movieId) VALUES (genre_id, movie_id);
     END IF;
+
+    INSERT INTO movies (id, title, year, director) VALUES (movie_id, title, year, director);
 END;
 
 CREATE PROCEDURE get_next_movie_id(OUT movie_id VARCHAR(10))
