@@ -85,7 +85,7 @@ public class SingleStarServlet extends HttpServlet {
         try (Connection conn = dataSource.getConnection()) {
             String id = getId(conn);
 
-            String query = "INSERT INTO (id, name, birthYear) VALUES (?, ?, ?)";
+            String query = "INSERT INTO stars (id, name, birthYear) VALUES (?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(query);
 
             statement.setString(1, id);
