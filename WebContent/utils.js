@@ -4,6 +4,9 @@ const navPlaceholder = $("#nav-placeholder");
 navPlaceholder.load("nav.html", () => {
     const logoutForm = $("#logout-form");
 
+    function handleSuccess() {
+        window.location.replace("login.html");
+    }
 
     function submitLogoutForm(formSubmitEvent) {
         formSubmitEvent.preventDefault();
@@ -11,6 +14,7 @@ navPlaceholder.load("nav.html", () => {
         $.ajax({
             url: baseURL + "/api/employees/logout",
             method: "POST",
+            success: handleSuccess
         });
     }
 
