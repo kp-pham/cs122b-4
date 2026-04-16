@@ -8,7 +8,7 @@ function showOrderDetails() {
             <tr>
                 <td>${record["saleId"]}</td>
                 <td>
-                    <a href="single-movie.html?=${record['movieId']}">${record["title"]}</a>
+                    <a href="single-movie.html?id=${record['movieId']}">${record["title"]}</a>
                 </td>
                 <td>${record["quantity"]}</td>
                 <td>$${record["price"]}</td>
