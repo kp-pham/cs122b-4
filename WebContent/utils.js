@@ -1,7 +1,7 @@
 const navPlaceholder = $("#nav-placeholder");
 navPlaceholder.load("nav.html");
 
-const logoutForm = $("#logout");
+const logoutForm = $("#logout-form");
 
 const baseURL = window.location.origin + '/' + window.location.pathname.split('/')[1];
 

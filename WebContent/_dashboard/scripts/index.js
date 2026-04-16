@@ -1,5 +1,3 @@
-const baseURL = window.location.origin + '/' + window.location.pathname.split('/')[1];
-
 function handleResult(resultData) {
     const schemas = $("#schemas");
 
