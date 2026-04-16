@@ -20,7 +20,7 @@ BEGIN
            INSERT INTO stars (id, name, birthYear) VALUES ( star_id, star_name, NULL);
         END IF;
 
-
+        INSERT INTO stars_in_movies(starId, movieId) VALUES (star_id, movie_id);
     END IF;
 
     IF NOT EXISTS (SELECT 1 FROM genres WHERE name = genre_name) THEN
