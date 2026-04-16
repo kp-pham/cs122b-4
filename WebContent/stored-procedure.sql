@@ -14,7 +14,9 @@ BEGIN
 
     CALL get_next_movie_id(movie_id);
 
-    IF star_name IS NOT NULL THEN
+    INSERT INTO movies (id, title, year, director) VALUES (movie_id, title, year, director);
+
+IF star_name IS NOT NULL THEN
         SET star_id = NULL;
         SELECT id INTO star_id FROM stars WHERE name = star_name LIMIT 1;
 
@@ -37,8 +39,6 @@ BEGIN
 
         INSERT INTO genres_in_movies (genreId, movieId) VALUES (genre_id, movie_id);
     END IF;
-
-    INSERT INTO movies (id, title, year, director) VALUES (movie_id, title, year, director);
 END;
 
 CREATE PROCEDURE get_next_movie_id(OUT movie_id VARCHAR(10))
