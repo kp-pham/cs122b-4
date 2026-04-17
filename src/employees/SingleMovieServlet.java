@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,6 +30,26 @@ public class SingleMovieServlet extends HttpServlet {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
         } catch (NamingException e) {
             e.printStackTrace();
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+
+        try (Connection conn = dataSource.getConnection()) {
+            String query = "{? = CALL add_movie(?, ?, ?, ?, ?)}";
+            CallableStatement statement = conn.prepareCall(query);
+
+        } catch (Exception e) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("errorMessage", e.getMessage());
+            out.write(jsonObject.toString());
+
+            request.getServletContext().log("Error:", e);
+            response.setStatus(500);
+
+        } finally {
+            out.close();
         }
     }
 }
