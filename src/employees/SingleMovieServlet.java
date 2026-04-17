@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.sql.ResultSet;
 
 @WebServlet(name = "employees.SingleMovieServlet", urlPatterns="/api/employees/movie")
@@ -54,7 +54,7 @@ public class SingleMovieServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        if (!hasTitle && !hasYear && !hasDirector) {
+        if (!hasTitle || !hasYear || !hasDirector) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("message", "Please provide the title, year, and director of the movie.");
 
@@ -67,7 +67,7 @@ public class SingleMovieServlet extends HttpServlet {
         int releaseYear;
 
         try {
-            releaseYear = Integer.parseInt(year);
+            releaseYear = Integer.parseInt(trimmedYear);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
@@ -90,8 +90,24 @@ public class SingleMovieServlet extends HttpServlet {
         }
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "{? = CALL add_movie(?, ?, ?, ?, ?)}";
+            String query = "{CALL add_movie(?, ?, ?, ?, ?)}";
             CallableStatement statement = conn.prepareCall(query);
+
+            statement.setString(1, trimmedTitle);
+            statement.setInt(2, releaseYear);
+            statement.setString(3, trimmedDirector);
+
+            if (hasStarName) {
+                statement.setString(4, trimmedStarName);
+            } else {
+                statement.setNull(4, Types.VARCHAR);
+            }
+
+            if (hasGenreName) {
+                statement.setString(5, trimmedGenreName);
+            } else {
+                statement.setNull(5, Types.VARCHAR);
+            }
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
