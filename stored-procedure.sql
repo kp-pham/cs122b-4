@@ -15,6 +15,7 @@ BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
+        SELECT "Error occurred. Transaction rolled back." AS message;
     END;
 
     START TRANSACTION;
