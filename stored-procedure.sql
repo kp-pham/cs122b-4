@@ -58,6 +58,8 @@ add_movie: BEGIN
     END IF;
 
     COMMIT;
+
+    SELECT "Successfully added movie." AS message;
 END add_movie;
 
 CREATE PROCEDURE get_duplicate_movie_id(
