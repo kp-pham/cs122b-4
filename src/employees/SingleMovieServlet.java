@@ -64,6 +64,31 @@ public class SingleMovieServlet extends HttpServlet {
             return;
         }
 
+        int releaseYear;
+
+        try {
+            releaseYear = Integer.parseInt(year);
+
+        } catch (Exception e) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", "Please provide a valid year.");
+
+            out.write(jsonObject.toString());
+            response.setStatus(400);
+
+            return;
+        }
+
+        if (releaseYear < 0) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", "Please provide a nonnegative number for year.");
+
+            out.write(jsonObject.toString());
+            response.setStatus(400);
+
+            return;
+        }
+
         try (Connection conn = dataSource.getConnection()) {
             String query = "{? = CALL add_movie(?, ?, ?, ?, ?)}";
             CallableStatement statement = conn.prepareCall(query);
