@@ -54,10 +54,21 @@ public class FullTextSearchServlet extends HttpServlet {
         response.setContentType("application/json");
 
         String title = request.getParameter("title");
+        String sort = request.getParameter("sort");
+        String page = request.getParameter("page");
+        String size = request.getParameter("pageSize");
+
+        String trimmedTitle = (title == null) ? null : title.trim();
+        String trimmedPage = (page == null) ? null : page.trim();
+        String trimmedSize = (size == null) ? null : size.trim();
+
+        boolean hasTitle = (trimmedTitle != null && !trimmedTitle.isEmpty());
+        boolean hasPage = (trimmedPage != null && !trimmedPage.isEmpty());
+        boolean hasSize = (trimmedSize != null && !trimmedSize.isEmpty());
 
         PrintWriter out = response.getWriter();
 
-        if (title == null || title.trim().isEmpty()) {
+        if (!hasTitle) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("message", "Please enter a search term.");
             out.write(jsonObject.toString());
@@ -65,6 +76,37 @@ public class FullTextSearchServlet extends HttpServlet {
             response.setStatus(400);
             return;
         }
+
+        int pageNumber = DEFAULT_PAGE_NUMBER;
+        int pageSize = DEFAULT_PAGE_SIZE;
+
+        try {
+            if (hasPage) {
+                pageNumber = Integer.parseInt(page);
+
+                if (pageNumber < 1) {
+                    throw new Exception("Please provide a valid page number");
+                }
+            }
+
+            if (hasSize) {
+                pageSize = Integer.parseInt(size);
+
+                if (!ALLOWED_PAGE_SIZES.contains(pageSize)) {
+                    throw new Exception("Please provide a valid page size");
+                }
+            }
+
+        } catch (Exception E) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", "Please provide valid page number and size");
+            out.write(jsonObject.toString());
+
+            response.setStatus(400);
+            return;
+        }
+
+        int offset = (pageNumber - 1) * pageSize;
 
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT M.id, M.title, M.year, M.director, R.rating, " +
