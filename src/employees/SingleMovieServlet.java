@@ -27,7 +27,6 @@ public class SingleMovieServlet extends HttpServlet {
 
     private final String ROLLED_BACK = "ROLLED_BACK";
     private final String DUPLICATE_MOVIE = "DUPLICATE_MOVIE";
-    private final String SUCCESS = "SUCCESS";
 
     public void init(ServletConfig config) {
         try {
