@@ -162,6 +162,8 @@ public class FullTextSearchServlet extends HttpServlet {
 
             query += "LIMIT ? OFFSET ?";
 
+            String[] tokens = trimmedQuery.split("\\s+");
+
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, title);
             statement.setInt(2, pageSize + 1);
