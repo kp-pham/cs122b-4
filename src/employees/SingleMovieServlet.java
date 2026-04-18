@@ -118,11 +118,10 @@ public class SingleMovieServlet extends HttpServlet {
             String message = rs.getString("message");
 
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("message", rs.getString("message"));
 
             switch (message) {
                 case ROLLED_BACK:
-                    jsonObject.addProperty("message", "Something went wrong. Please try again.");
+                    jsonObject.addProperty("message", rs.getString("error"));
                     response.setStatus(500);
                     break;
 

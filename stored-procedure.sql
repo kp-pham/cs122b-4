@@ -22,7 +22,13 @@ add_movie: BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
-        SELECT "ROLLED_BACK" AS message;
+
+        GET DIAGNOSTICS CONDITION 1
+            @sqlstate = RETURNED_SQLSTATE,
+            @errno = MYSQL_ERRNO,
+            @text = MESSAGE_TEXT;
+
+        SELECT "ROLLED_BACK" AS message, CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text) AS error;
     END;
 
     START TRANSACTION;
