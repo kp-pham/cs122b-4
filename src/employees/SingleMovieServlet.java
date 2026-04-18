@@ -119,7 +119,21 @@ public class SingleMovieServlet extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("message", rs.getString("message"));
 
-            response.setStatus(200);
+            out.write(jsonObject.toString());
+
+            switch (message) {
+                case ROLLED_BACK:
+                    response.setStatus(500);
+                    break;
+
+                case DUPLICATE_MOVIE:
+                    response.setStatus(409);
+                    break;
+
+                default:
+                    response.setStatus(200);
+                    break;
+            }
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
