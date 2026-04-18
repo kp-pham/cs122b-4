@@ -46,7 +46,7 @@ public class MovieLoader implements DataLoader {
                 fields[3].equalsIgnoreCase("director");
     }
 
-    private void process(String line, String[] fields) {
+    private void process(String[] fields) {
         if (!validFields(fields)) {
             System.out.printf("Incorrect number of fields. Expected %d, Received %d%n.", EXPECTED_FIELDS_LENGTH, fields.length);
         }
@@ -59,6 +59,8 @@ public class MovieLoader implements DataLoader {
 
         if (!validId(id)) {
             System.out.printf("Invalid id. | %s", line);
+        } else if (!validTitle(title)) {
+            System.out.printf("Invalid title. %s", line);
         }
         // Length 4
         // Id is non null and nonempty and unique
@@ -76,14 +78,14 @@ public class MovieLoader implements DataLoader {
     }
 
     private boolean validTitle(String title) {
+        return title != null && !title.isEmpty();
+    }
+
+    private boolean validYear(String year) {
 
     }
 
-    private boolean validTitle(String year) {
-
-    }
-
-    private boolean validTitle(String director) {
+    private boolean validDirector(String director) {
 
     }
 }
