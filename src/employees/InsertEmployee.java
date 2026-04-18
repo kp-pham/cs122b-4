@@ -1,11 +1,10 @@
+package employees;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 
 public class InsertEmployee {
