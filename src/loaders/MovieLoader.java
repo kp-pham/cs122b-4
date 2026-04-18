@@ -15,4 +15,12 @@ public class MovieLoader implements DataLoader {
     public Set<String> load(String file) {
 
     }
+
+    public boolean validHeader(String[] fields) {
+        return  fields.length == 4 &&
+                fields[0].equalsIgnoreCase("id") &&
+                fields[1].equalsIgnoreCase("title") &&
+                fields[2].equalsIgnoreCase("year") &&
+                fields[3].equalsIgnoreCase("director");
+    }
 }
