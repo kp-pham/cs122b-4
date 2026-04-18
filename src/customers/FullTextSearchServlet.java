@@ -125,6 +125,52 @@ public class FullTextSearchServlet extends HttpServlet {
             statement.setInt(2, pageSize + 1);
             statement.setInt(3, offset);
 
+            ResultSet rs = statement.executeQuery();
+
+            JsonArray jsonArray = new JsonArray();
+
+            while (rs.next()) {
+                JsonObject jsonObject = new JsonObject();
+
+                jsonObject.addProperty("id", rs.getString("M.id"));
+                jsonObject.addProperty("title", rs.getString("M.title"));
+                jsonObject.addProperty("year", rs.getString("M.year"));
+                jsonObject.addProperty("director", rs.getString("M.director"));
+                jsonObject.addProperty("rating", rs.getString("R.rating"));
+
+                JsonArray genresArray = JsonParser.parseString(rs.getString("genres")).getAsJsonArray();
+                jsonObject.add("genres", genresArray);
+
+                JsonArray starsArray = JsonParser.parseString(rs.getString("stars")).getAsJsonArray();
+                jsonObject.add("stars", starsArray);
+
+                jsonArray.add(jsonObject);
+            }
+
+            JsonObject jsonObject = new JsonObject();
+
+            if (jsonArray.size() > pageSize) {
+                jsonObject.addProperty("lastPage", false);
+                jsonObject.addProperty("outOfBounds", false);
+                jsonArray.remove(jsonArray.size() - 1);
+
+            } else if (jsonArray.isEmpty()) {
+                jsonObject.addProperty("lastPage", true);
+                jsonObject.addProperty("outOfBounds", true);
+
+            } else {
+                jsonObject.addProperty("lastPage", true);
+                jsonObject.addProperty("outOfBounds", false);
+            }
+
+            jsonObject.add("results", jsonArray);
+
+            rs.close();
+            statement.close();
+
+            out.write(jsonObject.toString());
+            response.setStatus(200);
+
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("message", e.getMessage());
