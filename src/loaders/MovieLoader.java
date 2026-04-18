@@ -29,6 +29,8 @@ public class MovieLoader implements DataLoader {
                 return Set.of();
             }
 
+            String query = "INSERT INTO movies VALUES (?, ?, ?, ?, ?)";
+
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
@@ -79,6 +81,8 @@ public class MovieLoader implements DataLoader {
                 statement.setObject(i + 1, fields[i]);
             }
 
+            statement.setDouble(fields.length, getPrice());
+
             statement.addBatch();
 
             movieIds.add(id);
@@ -117,5 +121,14 @@ public class MovieLoader implements DataLoader {
 
     private boolean validDirector(String director) {
         return director != null && !director.isEmpty();
+    }
+
+    private double getPrice() {
+        double[] values = {0.00, 0.49, 0.99};
+
+        int dollars = (int) (Math.random() * 30) + 1;
+        double cents = values[(int)(Math.random() * 3)];
+
+        return dollars + cents;
     }
 }
