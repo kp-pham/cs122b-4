@@ -30,11 +30,12 @@ public class MovieLoader implements DataLoader {
             }
 
             String query = "INSERT INTO movies VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(query);
 
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] fields = line.split(",");
-                process(fields);
+                process(fields, statement);
             }
 
         } catch (Exception e) {
