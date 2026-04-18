@@ -19,7 +19,7 @@ CREATE TABLE ft (
 
 /*
 
-Note: Please change the username, password and the name of the datbase.
+Note: Please change the username, password and the name of the database.
 
 */
 
@@ -29,11 +29,10 @@ public class BatchInsert {
 
         Connection conn = null;
 
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        String jdbcURL="jdbc:mysql://localhost:3306/<DB NAME>";
+        Class.forName(System.getenv("JDBC_DRIVER")).newInstance();
 
         try {
-            conn = DriverManager.getConnection(jdbcURL,"<PUT USER NAME HERE>", "<PUT PASSWORD HERE>");
+            conn = DriverManager.getConnection(System.getenv("URL");, System.getenv("USER"), System.getenv("PASSWORD"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
