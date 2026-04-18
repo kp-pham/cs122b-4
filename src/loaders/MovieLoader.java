@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -54,7 +55,9 @@ public class MovieLoader implements DataLoader {
             fields[i] = fields[i].trim();
         }
 
-        if (!validId(fields[0])) {
+        String id = fields[0], title = fields[1], year = fields[2], director = fields[3];
+
+        if (!validId(id)) {
             System.out.printf("Invalid id. | %s", line);
         }
         // Length 4
