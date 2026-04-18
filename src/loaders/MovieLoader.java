@@ -1,12 +1,13 @@
 package loaders;
 
 import java.io.FileReader;
-import java.sql.Connection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 public class MovieLoader implements DataLoader {
     private final Connection conn;
@@ -46,7 +47,7 @@ public class MovieLoader implements DataLoader {
                 fields[3].equalsIgnoreCase("director");
     }
 
-    private void process(String[] fields) {
+    private void process(String[] fields, PreparedStatement statement) throws Exception {
         if (!validFields(fields)) {
             System.out.printf("Expected %d fields, Received %d fields: %s\n", EXPECTED_FIELDS_LENGTH, fields.length, String.join(", ", fields));
         }
@@ -59,12 +60,22 @@ public class MovieLoader implements DataLoader {
 
         if (!validId(id)) {
             System.out.printf("Invalid id: %s\n", String.join(", ", fields));
+
         } else if (!validTitle(title)) {
             System.out.printf("Invalid title: %s\n", String.join(",", fields));
+
         } else if (!validYear(year)) {
             System.out.printf("Invalid year: %s\n", String.join(",", fields));
+
         } else if (!validDirector(director)) {
             System.out.printf("Invalid director: %s\n", String.join(",", fields));
+
+        } else {
+            for (int i = 0; i < fields.length; ++i) {
+                statement.setObject(i + 1, fields[i]);
+            }
+
+            statement.addBatch();
         }
         // Length 4
         // Id is non null and nonempty and unique
@@ -86,7 +97,7 @@ public class MovieLoader implements DataLoader {
     }
 
     private boolean validYear(String year) {
-        if (year == null || !year.isEmpty()) {
+        if (year == null || year.isEmpty()) {
             return false;
         }
 
