@@ -23,7 +23,7 @@ public class MovieLoader implements DataLoader {
         }
     }
 
-    public boolean validHeader(String[] fields) {
+    private boolean validHeader(String[] fields) {
         return  fields.length == 4 &&
                 fields[0].equalsIgnoreCase("id") &&
                 fields[1].equalsIgnoreCase("title") &&
