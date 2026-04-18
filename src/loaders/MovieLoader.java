@@ -54,6 +54,9 @@ public class MovieLoader implements DataLoader {
             fields[i] = fields[i].trim();
         }
 
+        if (!validId(fields[0])) {
+            System.out.printf("Invalid id. | %s", line);
+        }
         // Length 4
         // Id is non null and nonempty and unique
         // Title is non null and nonempty
