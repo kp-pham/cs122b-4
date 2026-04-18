@@ -1,3 +1,9 @@
+DROP PROCEDURE IF EXISTS add_movie;
+DROP PROCEDURE IF EXISTS get_duplicate_movie_id;
+DROP PROCEDURE IF EXISTS get_next_movie_id;
+DROP PROCEDURE IF EXISTS get_next_star_id;
+DROP PROCEDURE IF EXISTS get_next_genre_id;
+
 DELIMITER $$
 
 CREATE PROCEDURE add_movie (
@@ -23,7 +29,7 @@ add_movie: BEGIN
 
     CALL get_duplicate_movie_id(title, year, director, duplicate_movie_id);
 
-    IF duplicate_movie_id IS NOT NULL THEN:
+    IF duplicate_movie_id IS NOT NULL THEN
         SELECT "DUPLICATE_MOVIE" AS message;
         ROLLBACK;
         LEAVE add_movie;
@@ -89,7 +95,7 @@ BEGIN
     SET number = REGEXP_REPLACE(id, [a-zA-z], "");
 
     SET movie_id = CONCAT(prefix, number + 1);
-END proc;
+END;
 
 CREATE PROCEDURE get_next_star_id(OUT star_id VARCHAR(10))
 BEGIN
