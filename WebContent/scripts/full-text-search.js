@@ -3,13 +3,13 @@ const fullTextSearch = $("#full-text");
 function handleFullTextSearch(formSubmitEvent) {
     formSubmitEvent.preventDefault();
 
-    let title = $.trim($("input[name=q]").val());
+    let query = $.trim($("input[name=q]").val());
 
-    if (title.length === 0) {
+    if (query.length === 0) {
         return;
     }
 
-    window.location.href = "list.html?q=" + title;
+    window.location.href = "list.html?q=" + query;
 }
 
 fullTextSearch.submit(handleFullTextSearch);

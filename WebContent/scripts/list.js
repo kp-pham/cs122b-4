@@ -121,7 +121,7 @@ function showResults() {
         } else if (query != null) {
             state = {
                 type: "full-text",
-                query: query,
+                q: query,
                 sort: sort,
                 page: page,
                 pageSize: pageSize
