@@ -32,18 +32,17 @@ public class BatchInsert {
         Class.forName(System.getenv("JDBC_DRIVER")).newInstance();
 
         try {
-            conn = DriverManager.getConnection(System.getenv("URL");, System.getenv("USER"), System.getenv("PASSWORD"));
+            conn = DriverManager.getConnection(System.getenv("URL"), System.getenv("USER"), System.getenv("PASSWORD"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        PreparedStatement psInsertRecord=null;
-        String sqlInsertRecord=null;
+        PreparedStatement psInsertRecord = null;
+        String sqlInsertRecord = null;
 
-        int[] iNoRows=null;
-        
+        int[] iNoRows = null;
 
-        sqlInsertRecord="insert into ft (entryID, entry) values(?,?)";
+        sqlInsertRecord = "INSERT INTO ft (entryID, entry) values (?, ?)";
         try {
 			conn.setAutoCommit(false);
 
