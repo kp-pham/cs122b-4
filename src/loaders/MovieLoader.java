@@ -63,6 +63,8 @@ public class MovieLoader implements DataLoader {
             System.out.printf("Invalid title: %s", String.join(",", fields));
         } else if (!validYear(year)) {
             System.out.printf("Invalid year: %s", String.join(",", fields));
+        } else if (!validDirector(director)) {
+            System.out.printf("Invalid director: %s", String.join(",", fields));
         }
         // Length 4
         // Id is non null and nonempty and unique
@@ -98,6 +100,6 @@ public class MovieLoader implements DataLoader {
     }
 
     private boolean validDirector(String director) {
-
+        return director != null && !director.isEmpty();
     }
 }
