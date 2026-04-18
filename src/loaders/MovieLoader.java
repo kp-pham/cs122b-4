@@ -9,9 +9,11 @@ import java.util.HashSet;
 
 public class MovieLoader implements DataLoader {
     private final Connection conn;
+    private final Set<String> movieIds;
 
     public MovieLoader(Connection conn) {
         this.conn = conn;
+        this.movieIds = new HashSet<String>();
     }
 
     public Set<String> load(String file) {
@@ -24,7 +26,8 @@ public class MovieLoader implements DataLoader {
 
             String line;
             while ((line = reader.readLine()) != null) {
-
+                String[] fields = line.split(",");
+                process(fields);
             }
 
         } catch (Exception e) {
@@ -41,6 +44,22 @@ public class MovieLoader implements DataLoader {
     }
 
     private void process(String[] fields) {
+
+    }
+
+    private boolean validId(String id) {
+
+    }
+
+    private boolean validTitle(String title) {
+
+    }
+
+    private boolean validTitle(String year) {
+
+    }
+
+    private boolean validTitle(String director) {
 
     }
 }
