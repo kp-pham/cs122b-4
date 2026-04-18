@@ -37,6 +37,11 @@ public class FullTextSearchServlet extends HttpServlet {
     private static final String SORT_RATING_ASC_TITLE_ASC = "rating-asc-title-asc";
     private static final String SORT_RATING_DESC_TITLE_DESC = "rating-desc-title-desc";
 
+    private static final int DEFAULT_PAGE_NUMBER = 1;
+    private static final int DEFAULT_PAGE_SIZE = 25;
+
+    Set<Integer> ALLOWED_PAGE_SIZES = Set.of(10, 25, 50, 100);
+
     public void init(ServletConfig config) {
         try {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
@@ -113,8 +118,12 @@ public class FullTextSearchServlet extends HttpServlet {
                     break;
             }
 
-            PreparedStatement statement = conn.prepareStatement(query);
+            query += "LIMIT ? OFFSET ?";
 
+            PreparedStatement statement = conn.prepareStatement(query);
+            statement.setString(1, title);
+            statement.setInt(2, pageSize + 1);
+            statement.setInt(3, offset);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
