@@ -28,6 +28,15 @@ public class FullTextSearchServlet extends HttpServlet {
 
     private DataSource dataSource;
 
+    private static final String SORT_TITLE_DESC_RATING_ASC = "title-desc-rating-asc";
+    private static final String SORT_TITLE_ASC_RATING_ASC = "title-asc-rating-asc";
+    private static final String SORT_TITLE_DESC_RATING_DESC = "title-desc-rating-desc";
+
+    private static final String SORT_RATING_ASC_TITLE_DESC = "rating-asc-title-desc";
+    private static final String SORT_RATING_DESC_TITLE_ASC = "rating-desc-title-asc";
+    private static final String SORT_RATING_ASC_TITLE_ASC = "rating-asc-title-asc";
+    private static final String SORT_RATING_DESC_TITLE_DESC = "rating-desc-title-desc";
+
     public void init(ServletConfig config) {
         try {
             dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
@@ -69,6 +78,40 @@ public class FullTextSearchServlet extends HttpServlet {
                            "LEFT JOIN ratings AS R ON R.movieId = M.id " +
                            "WHERE MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
                            "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
+
+            switch(sort) {
+                case SORT_TITLE_DESC_RATING_ASC:
+                    query += "ORDER BY M.title DESC, R.rating ASC ";
+                    break;
+
+                case SORT_TITLE_ASC_RATING_ASC:
+                    query += "ORDER BY M.title ASC, R.rating ASC ";
+                    break;
+
+                case SORT_TITLE_DESC_RATING_DESC:
+                    query += "ORDER BY M.title DESC, R.rating DESC ";
+                    break;
+
+                case SORT_RATING_ASC_TITLE_DESC:
+                    query += "ORDER BY R.rating ASC, M.title DESC ";
+                    break;
+
+                case SORT_RATING_DESC_TITLE_ASC:
+                    query += "ORDER BY R.rating DESC, M.title ASC ";
+                    break;
+
+                case SORT_RATING_ASC_TITLE_ASC:
+                    query += "ORDER BY R.rating ASC, M.title ASC ";
+                    break;
+
+                case SORT_RATING_DESC_TITLE_DESC:
+                    query += "ORDER BY R.rating DESC, M.title DESC ";
+                    break;
+
+                default:
+                    query += "ORDER BY M.title ASC, R.rating DESC ";
+                    break;
+            }
 
             PreparedStatement statement = conn.prepareStatement(query);
 
