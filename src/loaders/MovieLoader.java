@@ -16,7 +16,12 @@ public class MovieLoader implements DataLoader {
 
     public Set<String> load(String file) {
         try (BufferedReader reader = new BufferedReader(new FileReader("movies.csv"))) {
+            String header = reader.readLine();
 
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+            }
 
         } catch (Exception e) {
            e.printStackTrace();
@@ -31,5 +36,7 @@ public class MovieLoader implements DataLoader {
                 fields[3].equalsIgnoreCase("director");
     }
 
+    private void process(String[] fields) {
 
+    }
 }
