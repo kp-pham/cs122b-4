@@ -66,7 +66,7 @@ add_movie: BEGIN
     COMMIT;
 
     SELECT "SUCCESS" AS message, movie_id AS movieId, star_id AS starId, genre_id AS genreId;
-END add_movie;
+END add_movie$$
 
 CREATE PROCEDURE get_duplicate_movie_id(
     IN _title VARCHAR(100),
@@ -81,7 +81,7 @@ BEGIN
     AND year = _year
     AND director = _director
     LIMIT 1;
-END
+END$$
 
 CREATE PROCEDURE get_next_movie_id(OUT movie_id VARCHAR(10))
 BEGIN
@@ -95,7 +95,7 @@ BEGIN
     SET number = REGEXP_REPLACE(id, [a-zA-z], "");
 
     SET movie_id = CONCAT(prefix, number + 1);
-END;
+END$$
 
 CREATE PROCEDURE get_next_star_id(OUT star_id VARCHAR(10))
 BEGIN
@@ -109,7 +109,7 @@ BEGIN
     SET number = REGEXP_REPLACE(id, [a-zA-z], "");
 
     SET star_id = CONCAT(prefix, number + 1);
-END;
+END$$
 
 CREATE PROCEDURE get_next_genre_id(OUT genre_id INTEGER)
 BEGIN
@@ -118,8 +118,6 @@ BEGIN
     SELECT MAX(id) INTO id FROM genres;
 
     SET genre_id = id + 1;
-END;
-
-$$
+END$$
 
 DELIMITER ;
