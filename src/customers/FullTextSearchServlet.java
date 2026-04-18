@@ -172,8 +172,10 @@ public class FullTextSearchServlet extends HttpServlet {
                                 .append("*");
             }
 
+            String entry = logicalOperators.toString();
+
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, title);
+            statement.setString(1, entry);
             statement.setInt(2, pageSize + 1);
             statement.setInt(3, offset);
 
