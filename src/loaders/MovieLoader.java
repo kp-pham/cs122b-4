@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class MovieLoader implements DataLoader {
     private final Connection conn;
@@ -74,6 +75,54 @@ public class MovieLoader implements DataLoader {
 
         PreparedStatement statement = conn.prepareStatement(query);
         statement.executeUpdate();
+        statement.close();
+    }
+
+    private void reportErrors() throws SQLException {
+        String query = "SELECT *, " +
+                       "CASE " +
+                       "    WHEN id IS NULL OR id = '' THEN 'Invalid or missing id' " +
+                       "    WHEN title IS NULL OR title = '' THEN 'Invalid or missing title' " +
+                       "    WHEN year IS NULL OR year = '' OR year NOT REGEXP '^[0-9]+$' THEN 'Invalid or missing year' " +
+                       "    WHEN director IS NULL OR director = '' THEN 'Invalid or missing director' " +
+                       "    WHEN id IN ( " +
+                       "        SELECT id " +
+                       "        FROM movies_staging " +
+                       "        GROUP BY id " +
+                       "        HAVING COUNT(*) > 1" +
+                       "    ) THEN 'Duplicate in file' " +
+                       "    WHEN EXISTS ( " +
+                       "        SELECT 1 FROM movies AS M WHERE M.id = S.id " +
+                       "    ) 'Movie already exists in database' " +
+                       "   END AS error" +
+                       "FROM movies_staging AS S " +
+                       "WHERE id IS NULL OR id = '' " +
+                       "OR title IS NULL OR title = '' " +
+                       "OR year IS NULL OR year = '' OR year NOT REGEXP '^[0-9]+$' " +
+                       "OR director IS NULL OR director = '' " +
+                       "OR id IN ( " +
+                       "    SELECT id" +
+                       "    FROM movies_staging " +
+                       "    GROUP BY id " +
+                       "    HAVING COUNT(*) > 1 " +
+                       ") " +
+                       "OR EXISTS ( " +
+                       "    SELECT 1 FROM movies AS M WHERE M.id = S.id " +
+                       ")";
+
+        PreparedStatement statement = conn.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
+
+        while (rs.next()) {
+            System.out.printf("%s: %s, %s, %s, %s",
+                              rs.getString("error"),
+                              rs.getString("id"),
+                              rs.getString("title"),
+                              rs.getString("year"),
+                              rs.getString("director")
+            );
+        }
+
         statement.close();
     }
 }
