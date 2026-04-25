@@ -1,12 +1,6 @@
 package loaders;
 
-import java.io.FileReader;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +14,23 @@ public class MovieLoader implements DataLoader {
 
     @Override
     public void load(String file) throws Exception {
-        createStagingTable();
-        loadToStaging(file);
-        validateAndTransform();
-        reportErrors();
+        try {
+            conn.setAutoCommit(false);
+
+            createStagingTable();
+            loadToStaging(file);
+            validateAndTransform();
+            reportErrors();
+
+            conn.commit();
+
+        } catch (Exception e) {
+            conn.rollback();
+            throw e;
+
+        } finally {
+            conn.setAutoCommit(true);
+        }
     }
 
     private void createStagingTable() throws SQLException {
