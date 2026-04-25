@@ -20,6 +20,7 @@ public class MovieLoader implements DataLoader {
     @Override
     public void load(String file) throws Exception {
         createStagingTable();
+        loadToStaging(file);
     }
 
     private void createStagingTable() throws SQLException {
@@ -37,6 +38,19 @@ public class MovieLoader implements DataLoader {
         statement = conn.prepareStatement(createQuery);
         statement.executeUpdate();
 
+        statement.close();
+    }
+
+    private void loadToStaging(String file) throws SQLException {
+        String query = String.format("LOAD DATA LOCAL INFILE %s " +
+                                     "INTO TABLE movies_staging " +
+                                     "FIELDS TERMINATED BY ',' " +
+                                     "ENCLOSED BY '\"' " +
+                                     "LINES TERMINATED BY '\r\n' " +
+                                     "IGNORE 1 ROWS", file);
+
+        PreparedStatement statement = conn.prepareStatement(query);
+        statement.executeUpdate(query);
         statement.close();
     }
 }
