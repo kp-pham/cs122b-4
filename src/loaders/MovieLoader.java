@@ -74,26 +74,41 @@ public class MovieLoader implements DataLoader {
     }
 
     private void validateAndTransform() throws SQLException {
-        String query = "INSERT INTO movies (id, title, year, director, price) " +
-                       "SELECT id, " +
-                       "       title, " +
-                       "       CAST(year AS UNSIGNED), " +
-                       "       director, " +
-                       "       FLOOR(1 + RAND() * 30) + ELT(FLOOR(1 + RAND() * 3), 0.99, 0.49, 0.00) " +
-                       "FROM movies_staging AS S " +
-                       "WHERE id IS NOT NULL AND id != '' " +
-                       "AND title IS NOT NULL AND title != '' " +
-                       "AND year IS NOT NULL AND year != '' AND year REGEXP '^[0-9]+$' " +
-                       "AND director IS NOT NULL AND director != '' " +
-                       "AND NOT EXISTS ( " +
-                       "    SELECT 1 FROM movies AS M WHERE M.id = S.id " +
-                       ") " +
-                       "AND id IN ( " +
-                       "    SELECT id " +
-                       "    FROM movies_staging " +
+        String query = "WITH cleaned AS ( " +
+                       "    SELECT * FROM movies_staging " +
+                       "    WHERE id IS NOT NULL AND id != '' " +
+                       "    AND title IS NOT NULL and title != '' " +
+                       "    AND year IS NOT NULL AND year != '' AND year REGEXP '^[0-9]+$' " +
+                       "    AND director IS NOT NULL AND director != '' " +
                        "    GROUP BY id " +
                        "    HAVING COUNT(*) = 1 " +
-                       ")";
+                       ") " +
+                       "INSERT INTO movies (id, title, year, director, price) " +
+                       "SELECT C.id, C.title, CAST(C.year AS UNSIGNED), C.director, " +
+                       "       FLOOR(1 + RAND() * 30) + ELT(FLOOR(1 + RAND() * 3), 0.99, 0.49, 0.00) " +
+                       "FROM cleaned AS C " +
+                       "LEFT JOIN movies AS M ON M.id = C.id " +
+                       "WHERE M.id IS NULL";
+
+//        String query = "INSERT INTO movies (id, title, year, director, price) " +
+//                       "SELECT id, " +
+//                       "       title, " +
+//                       "       CAST(year AS UNSIGNED), " +
+//                       "       director, " +
+//                       "       FLOOR(1 + RAND() * 30) + ELT(FLOOR(1 + RAND() * 3), 0.99, 0.49, 0.00) " +
+//                       "FROM movies_staging AS S1 " +
+//                       "WHERE id IS NOT NULL AND id != '' " +
+//                       "AND title IS NOT NULL AND title != '' " +
+//                       "AND year IS NOT NULL AND year != '' AND year REGEXP '^[0-9]+$' " +
+//                       "AND director IS NOT NULL AND director != '' " +
+//                       "AND NOT EXISTS ( " +
+//                       "    SELECT 1 FROM movies AS M WHERE M.id = S1.id " +
+//                       ") " +
+//                       "AND ( " +
+//                       "    SELECT COUNT(*) " +
+//                       "    FROM movies_staging AS S2 " +
+//                       "    WHERE S1.id = S2.id " +
+//                       ") = 1";
 
         PreparedStatement statement = conn.prepareStatement(query);
         statement.executeUpdate();
