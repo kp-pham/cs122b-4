@@ -22,6 +22,7 @@ public class MovieLoader implements DataLoader {
         createStagingTable();
         loadToStaging(file);
         validateAndTransform();
+        reportErrors();
     }
 
     private void createStagingTable() throws SQLException {
@@ -66,6 +67,7 @@ public class MovieLoader implements DataLoader {
                        "WHERE id IS NOT NULL AND id != '' " +
                        "AND title IS NOT NULL AND title != '' " +
                        "AND year REGEXP '^[0-9]+$' " +
+                       "AND director IS NOT NULL AND director != '' " +
                        "AND NOT EXISTS ( " +
                        "    SELECT 1 FROM movies AS M WHERE M.id = S.id " +
                        ")";
