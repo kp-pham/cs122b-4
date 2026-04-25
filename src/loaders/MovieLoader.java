@@ -99,7 +99,7 @@ public class MovieLoader implements DataLoader {
     }
 
     private boolean uniqueId(String id) {
-        return movieIds.contains(id);
+        return !movieIds.contains(id);
     }
 
     private boolean validTitle(String title) {
