@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 
 public class IngestData {
     public static void main(String[] args) throws Exception {
-        String username = System.getenv("USER");
-        String password = System.getenv("PASSWORD");
-        String url = System.getenv("URL") + "?allowLoadLocalInfile=true";
+        String username = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        String url = System.getenv("DB_URL") + "?allowLoadLocalInfile=true";
 
         Class.forName(System.getenv("JDBC_DRIVER"));
         Connection conn = DriverManager.getConnection(url, username, password);

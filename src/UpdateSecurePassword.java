@@ -9,11 +9,11 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 
 public class UpdateSecurePassword {
     public static void main(String[] args) throws Exception {
-        String username = System.getenv("USER");
-        String password = System.getenv("PASSWORD");
-        String url = System.getenv("URL");
+        String username = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        String url = System.getenv("DB_URL");
 
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        Class.forName(System.getenv("JDBC_DRIVER"));
         Connection conn = DriverManager.getConnection(url, username, password);
         Statement statement = conn.createStatement();
 
