@@ -33,6 +33,13 @@ public class IngestData {
 
         System.out.println("\nLoading genres completed.\n");
 
+        System.out.println("\nLoading movie-star relationships...");
+
+        StarsInMoviesLoader starsInMoviesLoader = new StarsInMoviesLoader(conn);
+        starsInMoviesLoader.load("data/stars_in_movies.csv");
+
+        System.out.println("\nLoading movie-star relationships completed.\n");
+
         conn.close();
     }
 }

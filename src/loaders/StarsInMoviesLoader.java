@@ -75,25 +75,27 @@ public class StarsInMoviesLoader extends DataLoader {
     @Override
     protected void reportErrors() throws SQLException {
         String query = "WITH dupes AS ( " +
-                       "    SELECT id " +
+                       "    SELECT starId, movieId " +
                        "    FROM stars_in_movies_staging AS S " +
-                       "    GROUP BY id " +
+                       "    GROUP BY starId, movieId " +
                        "    HAVING COUNT(*) > 1 " +
                        ") " +
                        "SELECT S.starId, S.movieId, " +
                        "CASE " +
                        "    WHEN S.starId IS NULL OR S.starId = '' THEN 'Invalid or missing star id' " +
                        "    WHEN S.movieId IS NULL OR S.movieId = '' THEN 'Invalid or missing movie id' " +
-                       "    WHEN D.id IS NOT NULL THEN 'Duplicate in file' " +
+                       "    WHEN D.starID IS NOT NULL AND D.movieId IS NOT NULL THEN 'Duplicate in file' " +
                        "    WHEN stars.id IS NULL THEN 'Star id references nonexistent star' " +
                        "    WHEN M.id IS NULL THEN 'Movie id references nonexistent movie' " +
                        "END AS error " +
-                       "LEFT JOIN dupes AS D ON D.id = S.id " +
-                       "LEFT JOIN stars ON stars.id = S.id " +
-                       "LEFT JOIN movies AS M ON M.id = S.id " +
-                       "WHERE S.starId IS NULL OR starId = '' " +
+                       "FROM stars_in_movies_staging AS S " +
+                       "LEFT JOIN dupes AS D ON D.starId = S.starId " +
+                       "                    AND D.movieId = S.movieId " +
+                       "LEFT JOIN stars ON stars.id = S.starId " +
+                       "LEFT JOIN movies AS M ON M.id = S.movieId " +
+                       "WHERE S.starId IS NULL OR S.starId = '' " +
                        "OR S.movieId IS NULL OR S.movieId = '' " +
-                       "OR D.id IS NOT NULL " +
+                       "OR D.starId IS NOT NULL AND D.movieId IS NOT NULL " +
                        "OR stars.id IS NULL " +
                        "OR M.id IS NULL";
 
