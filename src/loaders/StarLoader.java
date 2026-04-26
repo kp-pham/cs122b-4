@@ -34,7 +34,7 @@ public class StarLoader extends DataLoader {
                        "INTO TABLE stars_staging " +
                        "FIELDS TERMINATED BY ',' " +
                        "ENCLOSED BY '\"' " +
-                       "LINES TERMINATED BY '\\r\\n' " +
+                       "LINES TERMINATED BY '\\n' " +
                        "IGNORE 1 ROWS";
 
         PreparedStatement statement = conn.prepareStatement(query);

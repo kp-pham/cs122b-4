@@ -35,7 +35,7 @@ public class MovieLoader extends DataLoader {
                        "INTO TABLE movies_staging " +
                        "FIELDS TERMINATED BY ',' " +
                        "ENCLOSED BY '\"' " +
-                       "LINES TERMINATED BY '\\r\\n' " +
+                       "LINES TERMINATED BY '\\n' " +
                        "IGNORE 1 ROWS";
 
         PreparedStatement statement = conn.prepareStatement(query);

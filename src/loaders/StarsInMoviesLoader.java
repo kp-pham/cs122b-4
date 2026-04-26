@@ -33,7 +33,7 @@ public class StarsInMoviesLoader extends DataLoader {
                        "INTO TABLE stars_in_movies_staging " +
                        "FIELDS TERMINATED BY ',' " +
                        "ENCLOSED BY '\"' " +
-                       "LINES TERMINATED BY '\\r\\n' " +
+                       "LINES TERMINATED BY '\\n' " +
                        "IGNORE 1 ROWS";
 
         PreparedStatement statement = conn.prepareStatement(query);
