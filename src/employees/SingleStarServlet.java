@@ -109,10 +109,11 @@ public class SingleStarServlet extends HttpServlet {
                 jsonObject.add("birthYear", null);
             }
 
-            out.write(jsonObject.toString());
-
+            jsonObject.addProperty("message", String.format("Star added. starId: %s", id));
             response.setStatus(201);
             response.setHeader("Location", "/api/customers/star?id=" + id);
+
+            out.write(jsonObject.toString());
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();

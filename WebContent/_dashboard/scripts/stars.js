@@ -2,10 +2,10 @@ const starsForm = $("#stars-form");
 const alertSuccess  = $("#alert-success");
 const alertFailure = $("#alert-failure");
 
-function handleSuccess() {
+function handleSuccess(resultData) {
     alertFailure.addClass("d-none");
 
-    alertSuccess.text("Successfully added star!");
+    alertSuccess.text(resultData["message"]);
     alertSuccess.removeClass("d-none");
 }
 
@@ -23,7 +23,7 @@ function handleFormSubmit(formSubmitEvent) {
         url: baseURL + "/api/employees/star",
         method: "POST",
         data: starsForm.serialize(),
-        success: handleSuccess,
+        success: (resultData) => handleSuccess(resultData),
         error: (jqXHR) => handleFailure(jqXHR)
     });
 }
