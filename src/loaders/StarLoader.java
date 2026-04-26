@@ -16,6 +16,7 @@ public class StarLoader extends DataLoader {
         String createQuery = "CREATE TABLE stars_staging( " +
                              "    id TEXT, " +
                              "    name TEXT " +
+                             "    birthYear TEXT " +
                              ")";
 
         PreparedStatement statement = conn.prepareStatement(dropQuery);
