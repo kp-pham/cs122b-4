@@ -86,12 +86,14 @@ public class StarLoader extends DataLoader {
                        "CASE " +
                        "    WHEN S.id IS NULL OR S.id = '' THEN 'Invalid or missing id' " +
                        "    WHEN S.name IS NULL OR S.name = '' THEN 'Invalid or missing name' " +
+                       "    WHEN S.birthYear IS NOT NULL AND S.birthYear != '' AND S.birthYear NOT REGEXP '^[0-9]+$' THEN 'Invalid birth year' " +
                        "END AS error " +
                        "FROM stars_staging AS S " +
                        "LEFT JOIN dupes AS D ON D.id = S.id " +
                        "LEFT JOIN stars ON stars.id = S.id " +
                        "WHERE S.id IS NULL OR S.id = '' " +
-                       "OR S.name IS NULL OR S.name = ''";
+                       "OR S.name IS NULL OR S.name = ''" +
+                       "OR (S.birthYear IS NOT NULL AND S.birthYear != '' AND S.birthYear NOT REGEXP '^[0-9]+$')";
 
         PreparedStatement statement = conn.prepareStatement(query);
         ResultSet rs = statement.executeQuery();
