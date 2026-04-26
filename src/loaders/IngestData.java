@@ -17,7 +17,14 @@ public class IngestData {
         MovieLoader movieLoader = new MovieLoader(conn);
         movieLoader.load("data/movies.csv");
 
-        System.out.println("\nLoading movies completed");
+        System.out.println("\nLoading movies completed.\n");
+
+        System.out.println("Loading stars...");
+
+        StarLoader starLoader = new StarLoader(conn);
+        starLoader.load("data/stars.csv");
+
+        System.out.println("\n Loading stars completed.\n");
 
         conn.close();
     }

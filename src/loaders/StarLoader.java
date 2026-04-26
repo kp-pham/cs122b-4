@@ -92,10 +92,12 @@ public class StarLoader extends DataLoader {
         ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
-            System.out.printf("%s: %s, %s%n",
-                               rs.getString("error"),
-                               rs.getString("id"),
-                               rs.getString("name")
+            System.out.printf("%s: %s, %s, %s%n",
+                              rs.getString("error"),
+                              rs.getString("id"),
+                              rs.getString("name"),
+                              rs.getString("birthYear")
+
             );
         }
 
