@@ -54,7 +54,7 @@ public class GenreLoader extends DataLoader {
                        "    SELECT S.id, S.name " +
                        "    FROM genres_staging AS S " +
                        "    INNER JOIN deduped AS D ON D.id = S.id " +
-                       "    WHERE S.id IS NOT NULL AND S.id != '' " +
+                       "    WHERE S.id IS NOT NULL AND S.id != '' AND S.id REGEXP '^[0-9]+$' " +
                        "    AND S.name IS NOT NULL AND S.name != '' " +
                        ") " +
                        "SELECT C.id, C.name " +
@@ -77,13 +77,13 @@ public class GenreLoader extends DataLoader {
                        ") " +
                        "SELECT S.id, S.name " +
                        "CASE " +
-                       "    WHEN S.id IS NULL OR S.id = '' THEN 'Invalid or missing id' " +
+                       "    WHEN S.id IS NULL OR S.id = '' OR S.id NOT REGEXP '^[0-9]+$' THEN 'Invalid or missing id' " +
                        "    WHEN S.name IS NULL OR S.name = '' THEN 'Invalid or missing name' " +
                        "END AS error " +
                        "FROM genres_staging AS S " +
                        "LEFT JOIN dupes AS D ON D.id = S.id " +
                        "LEFT JOIN genres AS G ON G.id = S.id " +
-                       "WHERE S.id IS NULL OR S.id = '' " +
+                       "WHERE S.id IS NULL OR S.id = '' OR S.id NOT REGEXP '^[0-9]+$' " +
                        "OR S.name IS NULL OR S.name = '' " +
                        "OR D.id IS NOT NULL " +
                        "OR G.id IS NOT NULL";
