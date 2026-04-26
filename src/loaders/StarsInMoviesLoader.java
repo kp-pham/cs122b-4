@@ -97,6 +97,18 @@ public class StarsInMoviesLoader extends DataLoader {
                        "OR stars.id IS NULL " +
                        "OR M.id IS NULL";
 
+        PreparedStatement statement = conn.prepareStatement(query);
+        ResultSet rs = statement.executeQuery();
 
+        while (rs.next()) {
+            System.out.printf("%s: %s, %s%n",
+                              rs.getString("error"),
+                              rs.getString("starId"),
+                              rs.getString("movieId")
+            );
+        }
+
+        rs.close();
+        statement.close();
     }
 }
