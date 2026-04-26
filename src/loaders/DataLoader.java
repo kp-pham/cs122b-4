@@ -33,6 +33,7 @@ public abstract class DataLoader {
             throw e;
 
         } finally {
+            deleteStagingTable();
             conn.setAutoCommit(true);
         }
     }
@@ -41,4 +42,5 @@ public abstract class DataLoader {
     protected abstract void loadToStaging(String file) throws SQLException;
     protected abstract void validateAndTransform() throws SQLException;
     protected abstract void reportErrors() throws SQLException;
+    protected abstract void deleteStagingTable() throws SQLException;
 }
