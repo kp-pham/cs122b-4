@@ -47,15 +47,16 @@ public class StarsInMoviesLoader extends DataLoader {
     protected void validateAndTransform() throws SQLException {
         String query = "INSERT INTO stars_in_movies (starId, movieId) " +
                        "WITH deduped AS ( " +
-                       "    SELECT id " +
+                       "    SELECT starId, movieId " +
                        "    FROM stars_in_movies_staging " +
-                       "    GROUP BY id " +
+                       "    GROUP BY starId, movieId " +
                        "    HAVING COUNT(*) = 1 " +
                        "), " +
                        "cleaned AS ( " +
                        "    SELECT S.starId, S.movieId " +
                        "    FROM stars_in_movies_staging AS S " +
-                       "    INNER JOIN deduped AS D ON D.id = S.id " +
+                       "    INNER JOIN deduped AS D ON D.starId = S.starId" +
+                       "                           AND D.movieId = S.movieId" +
                        "    WHERE S.starId IS NOT NULL AND S.starId != '' " +
                        "    AND S.movieId IS NOT NULL AND S.movieId != '' " +
                        ") " +
@@ -64,7 +65,7 @@ public class StarsInMoviesLoader extends DataLoader {
                        "LEFT JOIN stars AS S ON S.id = C.starId " +
                        "LEFT JOIN movies AS M ON M.id = C.movieId " +
                        "WHERE S.id IS NOT NULL " +
-                       "WHERE M.id IS NOT NULL";
+                       "AND M.id IS NOT NULL";
 
         PreparedStatement statement = conn.prepareStatement(query);
         statement.executeUpdate();
@@ -95,5 +96,7 @@ public class StarsInMoviesLoader extends DataLoader {
                        "OR D.id IS NOT NULL " +
                        "OR stars.id IS NULL " +
                        "OR M.id IS NULL";
+
+
     }
 }
