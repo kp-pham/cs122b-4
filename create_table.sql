@@ -82,13 +82,6 @@ CREATE TABLE employees(
     PRIMARY KEY (email)
 );
 
-CREATE TABLE ft (
-    entryID INT AUTO_INCREMENT,
-    entry text,
-    PRIMARY KEY (entryID),
-    FULLTEXT (entry)
-) ENGINE=MyISAM;
-
 CREATE INDEX index_top_rated
     ON ratings (rating DESC, movieId);
 
