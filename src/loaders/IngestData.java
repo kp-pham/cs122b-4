@@ -24,7 +24,7 @@ public class IngestData {
         StarLoader starLoader = new StarLoader(conn);
         starLoader.load("data/stars.csv");
 
-        System.out.println("\n Loading stars completed.\n");
+        System.out.println("\nLoading stars completed.\n");
 
         conn.close();
     }

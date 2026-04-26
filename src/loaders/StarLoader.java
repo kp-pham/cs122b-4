@@ -82,11 +82,13 @@ public class StarLoader extends DataLoader {
                        "    GROUP BY id " +
                        "    HAVING COUNT(*) > 1 " +
                        ") " +
-                       "SELECT S.id, S.name, S.birthYear " +
+                       "SELECT S.id, S.name, S.birthYear, " +
                        "CASE " +
                        "    WHEN S.id IS NULL OR S.id = '' THEN 'Invalid or missing id' " +
                        "    WHEN S.name IS NULL OR S.name = '' THEN 'Invalid or missing name' " +
                        "    WHEN S.birthYear IS NOT NULL AND S.birthYear != '' AND S.birthYear NOT REGEXP '^[0-9]+$' THEN 'Invalid birth year' " +
+                       "    WHEN D.id IS NOT NULL THEN 'Duplicate in file' " +
+                       "    WHEN stars.id IS NOT NULL THEN 'Star already exists in database' " +
                        "END AS error " +
                        "FROM stars_staging AS S " +
                        "LEFT JOIN dupes AS D ON D.id = S.id " +
