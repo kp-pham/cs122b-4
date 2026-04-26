@@ -12,7 +12,19 @@ public class StarsInMoviesLoader extends DataLoader {
 
     @Override
     protected void createStagingTable() throws SQLException {
+        String dropQuery = "DROP TABLE IF EXISTS genres_staging";
+        String createQuery = "CREATE TABLE stars_in_movies_staging( " +
+                             "    starId TEXT, " +
+                             "    movieId TEXT " +
+                             ")";
 
+        PreparedStatement statement = conn.prepareStatement(dropQuery);
+        statement.executeUpdate();
+
+        statement = conn.prepareStatement(createQuery);
+        statement.executeUpdate();
+
+        statement.close();
     }
 
     @Override
