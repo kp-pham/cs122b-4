@@ -95,7 +95,9 @@ public class StarLoader extends DataLoader {
                        "LEFT JOIN stars ON stars.id = S.id " +
                        "WHERE S.id IS NULL OR S.id = '' " +
                        "OR S.name IS NULL OR S.name = ''" +
-                       "OR (S.birthYear IS NOT NULL AND S.birthYear != '' AND S.birthYear NOT REGEXP '^[0-9]+$')";
+                       "OR (S.birthYear IS NOT NULL AND S.birthYear != '' AND S.birthYear NOT REGEXP '^[0-9]+$')" +
+                       "OR D.id IS NOT NULL " +
+                       "OR stars.id IS NOT NULL";
 
         PreparedStatement statement = conn.prepareStatement(query);
         ResultSet rs = statement.executeQuery();
