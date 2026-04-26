@@ -5,14 +5,28 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class StarLoader implements DataLoader {
-    private final Connection conn;
-
+public class StarLoader extends DataLoader {
     public StarLoader(Connection conn) {
-        this.conn = conn;
+        super(conn);
     }
 
     @Override
-    public void load(String file) throws Exception {
+    protected void createStagingTable() throws SQLException {
+
+    }
+
+    @Override
+    protected void loadToStaging(String file) throws SQLException {
+
+    }
+
+    @Override
+    protected void validateAndTransform() throws SQLException {
+
+    }
+
+    @Override
+    protected void reportErrors() throws SQLException {
+
     }
 }

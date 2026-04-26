@@ -10,6 +10,7 @@ public class MovieLoader extends DataLoader {
         super(conn);
     }
 
+    @Override
     protected void createStagingTable() throws SQLException {
         String dropQuery = "DROP TABLE IF EXISTS movies_staging";
         String createQuery = "CREATE TABLE movies_staging(" +
@@ -28,6 +29,7 @@ public class MovieLoader extends DataLoader {
         statement.close();
     }
 
+    @Override
     protected void loadToStaging(String file) throws SQLException {
         String query = "LOAD DATA LOCAL INFILE ? " +
                        "INTO TABLE movies_staging " +
@@ -43,6 +45,7 @@ public class MovieLoader extends DataLoader {
         statement.close();
     }
 
+    @Override
     protected void validateAndTransform() throws SQLException {
         String query = "INSERT INTO movies (id, title, year, director, price) " +
                        "WITH deduped AS (" +
@@ -71,6 +74,7 @@ public class MovieLoader extends DataLoader {
         statement.close();
     }
 
+    @Override
     protected void reportErrors() throws SQLException {
         String query = "WITH dupes AS ( " +
                        "    SELECT id " +
