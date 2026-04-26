@@ -83,7 +83,7 @@ CREATE TABLE employees(
 );
 
 CREATE INDEX index_top_rated
-    ON ratings (rating DESC, movieId);
+    ON ratings (movieId, rating DESC);
 
 CREATE INDEX index_movies_genres
     ON genres_in_movies (movieId, genreId);
