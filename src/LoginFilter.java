@@ -20,7 +20,7 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        if (isEmployeeOnly(httpRequest.getContextPath()) && httpRequest.getSession().getAttribute("employee") == null) {
+        if (isEmployeeOnly(httpRequest.getRequestURI()) && httpRequest.getSession().getAttribute("employee") == null) {
             httpResponse.sendRedirect("_dashboard/login.html");
         } else if (httpRequest.getSession().getAttribute("customer") == null) {
             httpResponse.sendRedirect("login.html");
@@ -33,8 +33,8 @@ public class LoginFilter implements Filter {
         return allowedURIs.stream().anyMatch(requestURI.toLowerCase()::endsWith);
     }
 
-    private boolean isEmployeeOnly(String contextPath) {
-        return contextPath.startsWith("/_dashboard") || contextPath.startsWith("/api/employees");
+    private boolean isEmployeeOnly(String requestURI) {
+        return requestURI.startsWith("/cs122b_war/_dashboard") || requestURI.startsWith("/cs122b_war/api/employees");
     }
 
     public void init(FilterConfig fConfig) {
