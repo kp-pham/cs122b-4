@@ -1,5 +1,6 @@
 # cs122b-3
 > Demonstration: [https://youtu.be/jyqnEpHWISE](https://youtu.be/jyqnEpHWISE)
+
 The third project extends the second project and implements reCAPTCHA, secure connections with HTTPS, and password encryption to enhance security, an employee dashboard to add new stars and movies to the database with stored procedures, an ETL pipeline for data ingestion from CSV files into the database, and full-text search for advanced search features. 
 
 ## Features
