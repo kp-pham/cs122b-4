@@ -134,7 +134,8 @@ public class FullTextSearchServlet extends HttpServlet {
                            "    GROUP BY S.id " +
                            ") AS S ON SIM.starId = S.id " +
                            "LEFT JOIN ratings AS R ON R.movieId = M.id " +
-                           "WHERE MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
+                           "WHERE M.title = ? " +
+                           "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
                            "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
 
             switch(sort) {
@@ -189,12 +190,11 @@ public class FullTextSearchServlet extends HttpServlet {
 
             String entry = logicalOperators.toString();
 
-            System.out.println("[" + entry + "]");
-
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, entry);
-            statement.setInt(2, pageSize + 1);
-            statement.setInt(3, offset);
+            statement.setString(1, trimmedQuery);
+            statement.setString(2, entry);
+            statement.setInt(3, pageSize + 1);
+            statement.setInt(4, offset);
 
             ResultSet rs = statement.executeQuery();
 
