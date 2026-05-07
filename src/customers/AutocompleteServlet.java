@@ -18,9 +18,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @WebServlet(name = "customers.AutocompleteServlet", urlPatterns="/api/customers/autocomplete")
 public class AutocompleteServlet extends HttpServlet {
@@ -36,7 +33,7 @@ public class AutocompleteServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 
@@ -47,11 +44,72 @@ public class AutocompleteServlet extends HttpServlet {
         String trimmedQuery = (q == null) ? null : q.trim();
         boolean hasQuery = (trimmedQuery != null && !trimmedQuery.isEmpty());
 
-        if (!hasQuery || trimmedQuery.length() <= 3) {
+        if (!hasQuery || trimmedQuery.length() < 3) {
             out.write(jsonArray.toString());
             response.setStatus(200);
 
             return;
+        }
+
+        try (Connection conn = dataSource.getConnection()) {
+            String query = "SELECT M.id, M.title " +
+                           "FROM movies AS M " +
+                           "WHERE M.title = ? " +
+                           "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
+                           "LIMIT 10";
+
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            String[] tokens = trimmedQuery.split("\\s+");
+
+            StringBuilder logicalOperators = new StringBuilder();
+
+            for (int i = 0; i < tokens.length; ++i) {
+                logicalOperators.append("+")
+                                .append(tokens[i])
+                                .append("*");
+
+                if (i < tokens.length - 1) {
+                    logicalOperators.append(" ");
+                }
+            }
+
+            String entry = logicalOperators.toString();
+
+            statement.setString(1, trimmedQuery);
+            statement.setString(2, entry);
+
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                JsonObject jsonObject = new JsonObject();
+
+                jsonObject.addProperty("value", rs.getString("M.title"));
+
+                JsonObject data = new JsonObject();
+                data.addProperty("id", rs.getString("M.id"));
+
+                jsonObject.add("data", data);
+
+                jsonArray.add(jsonObject);
+            }
+
+            rs.close();
+            statement.close();
+
+            out.write(jsonArray.toString());
+            response.setStatus(200);
+
+        } catch (Exception e) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("message", e.getMessage());
+            out.write(jsonObject.toString());
+
+            request.getServletContext().log("Error:", e);
+            response.setStatus(500);
+
+        } finally {
+            out.close();
         }
     }
 }
