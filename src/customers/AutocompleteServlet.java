@@ -39,5 +39,19 @@ public class AutocompleteServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+
+        JsonArray jsonArray = new JsonArray();
+
+        String q = request.getParameter("q");
+
+        String trimmedQuery = (q == null) ? null : q.trim();
+        boolean hasQuery = (trimmedQuery != null && !trimmedQuery.isEmpty());
+
+        if (!hasQuery || trimmedQuery.length() <= 3) {
+            out.write(jsonArray.toString());
+            response.setStatus(200);
+
+            return;
+        }
     }
 }
