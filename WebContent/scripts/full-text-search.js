@@ -34,9 +34,13 @@ function handleLookupAjaxSuccess(data, query, done) {
     done({ suggestions: data });
 }
 
+function handleSelectSuggestion(suggestion) {
+    window.location.href = `single-movie.html?id=${suggestion["data"]["id"]}`;
+}
+
 $("#autocomplete").autocomplete({
     lookup: (query, done) => handleLookup(query, done),
-    // onSelect: (suggestion) => handleSelectSuggestion(suggestion),
+    onSelect: (suggestion) => handleSelectSuggestion(suggestion),
     deferRequestBy: 300,
     minChars: 3,
     triggerSelectOnValidInput: false,
