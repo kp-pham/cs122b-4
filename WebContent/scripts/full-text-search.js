@@ -6,7 +6,7 @@ function handleLookup(query, done) {
     const cached = sessionStorage.getItem(query);
 
     if (cached) {
-        console.log("");
+        console.log("Using cached search results...");
 
         const suggestions = JSON.parse(cached);
 
