@@ -16,6 +16,22 @@ function handleLookup(query, done) {
 
         return;
     }
+
+    console.log("Sending AJAX request to server...");
+
+    $.ajax({
+        "dataType": "json",
+        "method": "GET",
+        "url": "api/customers/autocomplete?q=" + encodeURIComponent(query),
+        "success": (data) => handleLookupAjaxSuccess(data, query, done),
+    });
+}
+
+function handleLookupAjaxSuccess(data, query, done) {
+    console.log("Suggestions list from server: ", data);
+    sessionStorage.setItem(query, JSON.stringify(data));
+
+    done({ suggestions: data });
 }
 
 $("#autocomplete").autocomplete({
