@@ -43,8 +43,19 @@ public class TopRatedServlet extends HttpServlet {
 
         try (Connection conn = dataSource.getConnection()) {
             String query = "SELECT M.id, M.title, M.year, M.director, M.rating, " +
-                           "CONCAT('[', GROUP_CONCAT(DISTINCT G.name SEPARATOR ', '), ']') AS genres, " +
-                           "CONCAT('[', GROUP_CONCAT(DISTINCT JSON_OBJECT('id', S.id, 'name', S.name)), ']') AS stars " +
+                           "IFNULL( " +
+                           "    CONCAT('[', " +
+                           "           GROUP_CONCAT(DISTINCT JSON_QUOTE(G.name) ORDER BY G.name ASC), " +
+                           "           ']'), " +
+                           "    '[]' " +
+                           ") AS genres, " +
+                           "IFNULL( " +
+                           "    CONCAT('[', " +
+                           "           GROUP_CONCAT(DISTINCT CASE WHEN S.id IS NOT NULL THEN JSON_OBJECT('id', S.id, 'name', S.name) END " +
+                           "                        ORDER BY S.movie_count DESC, S.name ASC), " +
+                           "           ']'), " +
+                           "    '[]' " +
+                           ") AS stars " +
                            "FROM ( " +
                            "    SELECT M.id, M.title, M.year, M.director, R.rating " +
                            "    FROM movies AS M " +
@@ -55,7 +66,12 @@ public class TopRatedServlet extends HttpServlet {
                            "LEFT JOIN genres_in_movies AS GIM ON M.id = GIM.movieId " +
                            "LEFT JOIN genres AS G ON GIM.genreId = G.id " +
                            "LEFT JOIN stars_in_movies AS SIM ON M.id = SIM.movieId " +
-                           "LEFT JOIN stars AS S ON SIM.starId = S.id " +
+                           "LEFT JOIN (" +
+                           "    SELECT S.id, S.name, COUNT(SIM.movieId) AS movie_count " +
+                           "    FROM stars_in_movies AS SIM " +
+                           "    LEFT JOIN stars AS S ON SIM.starId = S.id " +
+                           "    GROUP BY S.id " +
+                           ") AS S ON SIM.starId = S.id " +
                            "GROUP BY M.id, M.title, M.year, M.director, M.rating " +
                            "ORDER BY M.rating DESC";
 
