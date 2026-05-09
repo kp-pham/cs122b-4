@@ -137,7 +137,7 @@ public class FullTextSearchServlet extends HttpServlet {
                            "WHERE M.title = ? " +
                            "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
                            "OR M.title LIKE CONCAT('%', ?, '%') " +
-                           "OR edth(?, M.title, ?) " +
+                           "OR edth(LOWER(?), LOWER(M.title), ?) " +
                            "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
 
             switch(sort) {

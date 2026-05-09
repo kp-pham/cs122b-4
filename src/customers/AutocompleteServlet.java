@@ -57,7 +57,7 @@ public class AutocompleteServlet extends HttpServlet {
                            "WHERE M.title = ? " +
                            "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
                            "OR M.title LIKE CONCAT('%', ?, '%') " +
-                           "OR edth(?, M.title, ?) " +
+                           "OR edth(LOWER(?), LOWER(M.title), ?) " +
                            "LIMIT 10";
 
             PreparedStatement statement = conn.prepareStatement(query);
