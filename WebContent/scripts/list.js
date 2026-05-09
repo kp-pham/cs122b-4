@@ -1,21 +1,7 @@
 const alertContainer = $("#alert-container")[0];
 
-function getParameterByName(target) {
-    // Retrieve URL from browser window
-    let url = window.location.href;
-
-    //Escape special characters
-    target = target.replace(/[\[\]]/g, "\\$&");
-
-    // Build and execute regular expression
-    let regex = new RegExp("[?&]" + target + "(=([^&#]*)|&|#|$)");
-    let results = regex.exec(url);
-
-    // Handle no matches and empty values
-    if (!results) return null;
-    if (!results[2]) return '';
-
-    return decodeURIComponent(results[2]);
+function encodeParams(params) {
+    return params.toString().replace(/\+/g, "%20");
 }
 
 function handleResult(resultData) {
@@ -158,7 +144,7 @@ function showResults() {
     jQuery.ajax({
         dataType: "json",
         method: "GET",
-        url: `api/${state["type"]}?${params.toString()}`,
+        url: `api/${state["type"]}?${encodeParams(params)}`,
         success: (resultData) => handleResult(resultData)
     });
 }
@@ -213,7 +199,7 @@ function submitOptionsForm(formSubmitEvent) {
     const pageSize = $("select[name=pageSize]").val();
     params.set("pageSize", pageSize);
 
-    window.location.href = `list.html?${params.toString()}`;
+    window.location.href = `list.html?${encodeParams(params)}`;
 }
 
 function submitPageForm(formSubmitEvent) {
@@ -231,7 +217,7 @@ function submitPageForm(formSubmitEvent) {
     const page = $(this).find("input[id='page']").val();
     params.set("page", page);
 
-    window.location.href = `list.html?${params.toString()}`;
+    window.location.href = `list.html?${encodeParams(params)}`;
 }
 
 showResults();
