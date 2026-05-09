@@ -56,6 +56,8 @@ public class AutocompleteServlet extends HttpServlet {
                            "FROM movies AS M " +
                            "WHERE M.title = ? " +
                            "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
+                           "OR M.title LIKE CONCAT('%', ?, '%') " +
+                           "OR edth(?, M.title, ?) " +
                            "LIMIT 10";
 
             PreparedStatement statement = conn.prepareStatement(query);
@@ -76,8 +78,13 @@ public class AutocompleteServlet extends HttpServlet {
 
             String entry = logicalOperators.toString();
 
+            int threshold = Math.max(1, trimmedQuery.length() / 4);
+
             statement.setString(1, trimmedQuery);
             statement.setString(2, entry);
+            statement.setString(3, trimmedQuery);
+            statement.setString(4, trimmedQuery);
+            statement.setInt(5, threshold);
 
             ResultSet rs = statement.executeQuery();
 
