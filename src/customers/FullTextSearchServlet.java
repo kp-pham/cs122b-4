@@ -136,6 +136,8 @@ public class FullTextSearchServlet extends HttpServlet {
                            "LEFT JOIN ratings AS R ON R.movieId = M.id " +
                            "WHERE M.title = ? " +
                            "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
+                           "OR M.title LIKE CONCAT('%', ?, '%') " +
+                           "OR eth(M.title, ?, ?) " +
                            "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
 
             switch(sort) {
@@ -190,11 +192,17 @@ public class FullTextSearchServlet extends HttpServlet {
 
             String entry = logicalOperators.toString();
 
+            // Allow 25% of the characters to be incorrect
+            int threshold = Math.max(1, trimmedQuery.length() / 4);
+
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, trimmedQuery);
             statement.setString(2, entry);
-            statement.setInt(3, pageSize + 1);
-            statement.setInt(4, offset);
+            statement.setString(3, trimmedQuery);
+            statement.setString(4, trimmedQuery);
+            statement.setInt(5, threshold);
+            statement.setInt(6, pageSize + 1);
+            statement.setInt(7, offset);
 
             ResultSet rs = statement.executeQuery();
 
