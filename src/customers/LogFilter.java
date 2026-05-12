@@ -1,0 +1,21 @@
+package customers;
+
+import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+@WebFilter(filterName = "customers.LogFilter", urlPatterns="/api/full-text")
+public class LogFilter implements Filter {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        long start = System.nanoTime();
+
+        chain.doFilter(request, response);
+
+        long end = System.nanoTime();
+
+        long ts = end - start;
+    }
+}
