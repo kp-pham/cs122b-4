@@ -17,5 +17,8 @@ public class LogFilter implements Filter {
         long end = System.nanoTime();
 
         long ts = end - start;
+        long tj = (long) request.getAttribute("TJ");
+
+        LogWriter.log(ts, tj);
     }
 }
