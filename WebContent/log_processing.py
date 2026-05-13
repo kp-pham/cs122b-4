@@ -15,8 +15,8 @@ def measure_time():
     average_ts = total_ts / samples
     average_tj = total_tj / samples
 
-    print(f"Average TS: {average_ts}")
-    print(f"Average TJ: {average_tj}")
+    print(f"Average TS: {average_ts} ns")
+    print(f"Average TJ: {average_tj} ns")
 
 
 def parse_line(line):
