@@ -19,6 +19,6 @@ def measure_time():
 
 def parse_line(line):
     ts, tj = line.split(",")
-    return int(ts[3:]), int(tj[3:])
+    return float(ts[3:]), float(tj[3:])
 
 measure_time()

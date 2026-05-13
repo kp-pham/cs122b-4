@@ -3,8 +3,6 @@ package customers;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 @WebFilter(filterName = "customers.LogFilter", urlPatterns="/api/full-text")
