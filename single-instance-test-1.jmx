@@ -81,19 +81,19 @@
           </CSVDataSet>
           <hashTree/>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Search">
-            <stringProp name="HTTPSampler.path">/cs122b/api/customers/full-text-search</stringProp>
+            <stringProp name="HTTPSampler.path">/cs122b/api/customers/search</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
             <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
             <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
             <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
               <collectionProp name="Arguments.arguments">
-                <elementProp name="q" elementType="HTTPArgument">
-                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <elementProp name="title" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">true</boolProp>
                   <stringProp name="Argument.value">${title}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                  <stringProp name="Argument.name">q</stringProp>
+                  <stringProp name="Argument.name">title</stringProp>
                 </elementProp>
               </collectionProp>
             </elementProp>
