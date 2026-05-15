@@ -204,8 +204,6 @@ public class FullTextSearchServlet extends HttpServlet {
             statement.setInt(6, pageSize + 1);
             statement.setInt(7, offset);
 
-            long start = System.nanoTime();
-
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
@@ -227,11 +225,6 @@ public class FullTextSearchServlet extends HttpServlet {
 
                 jsonArray.add(jsonObject);
             }
-
-            long end = System.nanoTime();
-
-            long tj = end - start;
-            request.setAttribute("TJ", tj);
 
             JsonObject jsonObject = new JsonObject();
 
