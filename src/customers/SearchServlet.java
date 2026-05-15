@@ -219,8 +219,6 @@ public class SearchServlet extends HttpServlet {
                 statement.setObject(i + 1, params.get(i));
             }
 
-            long start = System.nanoTime();
-
             ResultSet rs = statement.executeQuery();
 
             JsonArray jsonArray = new JsonArray();
@@ -242,12 +240,6 @@ public class SearchServlet extends HttpServlet {
 
                 jsonArray.add(jsonObject);
             }
-
-            long end = System.nanoTime();
-
-            long tj = end - start;
-            request.setAttribute("TJ", tj);
-
 
             JsonObject jsonObject = new JsonObject();
 
