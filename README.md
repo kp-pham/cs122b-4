@@ -1,10 +1,9 @@
-# cs122b-3
+# cs122b-4
 > Demonstration: [https://youtu.be/jyqnEpHWISE](https://youtu.be/jyqnEpHWISE)
 
 The third project extends the second project and implements reCAPTCHA, secure connections with HTTPS, and password encryption to enhance security, an employee dashboard to add new stars and movies to the database with stored procedures, an ETL pipeline for data ingestion from CSV files into the database, and full-text search for advanced search features. 
 
 ## Features
-> Click [here](docs/inconsistency-report.txt) to view inconsistency report.
 
 * Security
   * reCAPTCHA
@@ -20,3 +19,18 @@ The third project extends the second project and implements reCAPTCHA, secure co
 * Full-Text Search
   * Created full-text search index for movie titles
   * Tokenized keywords to show search results of movie titles containing keywords
+
+## JMeter Performance Tests Results
+
+| Single Instance Version Cases                   | Graph Results                                                                                                                         | Average Query Time (ms) | Average Search Servlet Time (ms) | Average JDBC Time (ms) |
+|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------|------------------------|
+| Case 1: HTTP/10 threads (No connection pooling) | ![Graph results for HTTP/10 threads (no connection pooling) with single instance.](./images/single-instance-case-1-graph-results.png) | 6378                    | 
+| Case 2: HTTP/1 thread                           | ![Graph results for HTTP/1 thread with single instance.](./images/single-instance-case-2-graph-results.png)                           | 933                     |
+| Case 3: HTTP/10 threads                         | ![Graph results for HTTP/10 threads with single instance.](./images/single-instance-case-3-graph-results.png)                         | 6354                    |
+| Case 4: HTTPS/10 threads                        | ![Graph results for HTTPS/10 threads with single instance.](./images/single-instance-case-4-graph-results.png)                        | 6854                    |
+
+| Scaled Version Cases                            | Graph Results                                                                                                                         | Average Query Time (ms) | Average Search Servlet Time (ms) | Average JDBC Time (ms) |
+|-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------|------------------------|
+| Case 1: HTTP/10 threads (No connection pooling) | ![Graph results for HTTP/10 threads (no connection pooling) with scaled version.](./images/scaled-version-case-1-graph-results.png)   | 3579                    | 
+| Case 2: HTTP/1 thread                           | ![Graph results for HTTP/1 thread with scaled version.](./images/scaled-version-case-2-graph-results.png)                             | 792                     |
+| Case 3: HTTP/10 threads                         | ![Graph results for HTTP/10 threads with scaled verison.](./images/scaled-version-case-3-graph-results.png)                           | 6391                    |
