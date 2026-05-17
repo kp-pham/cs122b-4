@@ -11,6 +11,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import utils.ConnectionManager;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +32,7 @@ public class SingleMovieServlet extends HttpServlet {
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+            dataSource = ConnectionManager.getMasterDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }
