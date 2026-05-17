@@ -26,6 +26,7 @@ The fourth project extends the third project and implements autocomplete suggest
   * Slave instance handles only read requests
 * Load Balancing
   * MySQL and Tomcat cluster with load balancer to distribute traffic between backend instances
+  * Enable connection pooling with minimum and maximum number of pooled connections and TTL values
   * Enable sticky sessions to ensure cookies are passed properly
 * Performance Tests
   * Measure performance of search feature based on average query time, average search servlet time (TS), and average JDBC time (TJ)
@@ -44,4 +45,4 @@ The fourth project extends the third project and implements autocomplete suggest
 |-------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|-------------------------|----------------------------------|------------------------|
 | Case 1: HTTP/10 threads (No connection pooling) | ![Graph results for HTTP/10 threads (no connection pooling) with scaled version.](./images/scaled-version-case-1-graph-results.png)   | 3579                    | 6321559308.036715                | 6321166982.816806      |
 | Case 2: HTTP/1 thread                           | ![Graph results for HTTP/1 thread with scaled version.](./images/scaled-version-case-2-graph-results.png)                             | 792                     | 701944008.0666162                | 701437536.2668433      |
-| Case 3: HTTP/10 threads                         | ![Graph results for HTTP/10 threads with scaled verison.](./images/scaled-version-case-3-graph-results.png)                           | 6391                    | 1953493497.8509464               | 1953021200.5449526     |
+| Case 3: HTTP/10 threads                         | ![Graph results for HTTP/10 threads with scaled verison.](./images/scaled-version-case-3-graph-results.png)                           | 2210                    | 5668273961.528966                | 5667704785.655812      |
