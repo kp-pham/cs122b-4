@@ -19,6 +19,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import utils.ConnectionManager;
+
 @WebServlet(name = "customers.AutocompleteServlet", urlPatterns="/api/customers/autocomplete")
 public class AutocompleteServlet extends HttpServlet {
     private static final long SerialVersionUID = 2L;
@@ -27,7 +29,7 @@ public class AutocompleteServlet extends HttpServlet {
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+            dataSource = ConnectionManager.getSlaveDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }

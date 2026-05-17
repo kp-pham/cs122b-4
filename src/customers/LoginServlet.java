@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
+import utils.ConnectionManager;
 
 
 @WebServlet(name = "customers.LoginServlet", urlPatterns = "/api/customers/login")
@@ -28,7 +29,7 @@ public class LoginServlet extends HttpServlet {
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+            dataSource = ConnectionManager.getSlaveDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }
