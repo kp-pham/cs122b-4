@@ -1,11 +1,11 @@
-import os
-
 def measure_time():
     total_ts = 0
     total_tj = 0
     samples = 0
 
-    with open(os.getenv("LOGFILE_PATH")) as file:
+    file_path = input("Enter file path: ")
+
+    with open(file_path) as file:
         for line in file:
             ts, tj = parse_line(line)
             total_ts += ts
