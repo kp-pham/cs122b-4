@@ -1,25 +1,36 @@
 # cs122b-4
 > Demonstration: [https://youtu.be/jyqnEpHWISE](https://youtu.be/jyqnEpHWISE)
 
-The third project extends the second project and implements reCAPTCHA, secure connections with HTTPS, and password encryption to enhance security, an employee dashboard to add new stars and movies to the database with stored procedures, an ETL pipeline for data ingestion from CSV files into the database, and full-text search for advanced search features. 
+The fourth project extends the third project and implements autocomplete suggestions, fuzzy search with user defined functions, and scales the application with connection pooling, master-slave replication, and load balancing. Performance tests are also performed with jMeter to measure the performance of the search feature.
 
 ## Features
 
-* Security
-  * reCAPTCHA
-  * HTTPS
-  * Password encryption
-* Employee Dashboard
-  * Add stars and movies 
-  * Created stored procedure to update movie-star and movie-genre relationships and handle duplicates when movies are inserted
-* ETL Pipeline for Data Ingestion
-  * ``LOAD DATA`` statement for batch loading  
-  * Staging table to perform data deduplication and validation
-  * Handled missing values, invalid values, duplicates, and relationship inconsistencies
-* Full-Text Search
-  * Created full-text search index for movie titles
-  * Tokenized keywords to show search results of movie titles containing keywords
-
+* Autocomplete Suggestions
+  * Perform full-text search on movie titles and return top 10 entries
+  * Support keyboard navigation and update search bar when suggestion entry is highlighted
+  * Jump to corresponding movie page when suggestion entry is clicked
+  * Small delay time and minimum character requirement to perform autocomplete search  
+  * Cache suggestion lists of each query sent to the backend server
+* Fuzzy Search using User-Defined Functions
+  * Implement fuzzy search with substring matching and Levenshtein Edit Distance Algorithm (LEDA)
+  * Fuzzy search takes the union of the results from ``LIKE`` and ``edth``
+  * Normalize edit distance based on query length to tune edit distance
+  * Search results combine fuzzy search and full-text search
+* Connection Pooling
+  * ``WebContent/META-INF/context.xml`` enables connection pooling and caching for prepared statements.
+  * ``src/customers/AutocompleteServlet`` and ``src/customers/FullTextSearchServlet`` use prepared statements to perform fuzzy search and full-text search when queries are received from the frontend.
+* Master-Slave Replication
+  * ``MASTER_LOG_FILE`` and ``MASTER_LOG_POS`` configured on the master instance
+  * Asynchronous data replication from the master instance to the slave instance
+  * Master instance handles both read and write requests
+  * Slave instance handles only read requests
+* Load Balancing
+  * MySQL and Tomcat cluster with load balancer to distribute traffic between backend instances
+  * Enable sticky sessions to ensure cookies are passed properly
+* Performance Tests
+  * Measure performance of search feature based on average query time, average search servlet time (TS), and average JDBC time (TJ)
+  * Log TS and TJ on servlets and calculate average TS and TJ with log processing script
+  
 ## JMeter Performance Tests Results
 
 | Single Instance Version Cases                   | Graph Results                                                                                                                         | Average Query Time (ms) | Average Search Servlet Time (ns) | Average JDBC Time (ns) |
