@@ -23,6 +23,8 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import utils.ConnectionManager;
+
 @WebServlet(name = "customers.CartServlet", urlPatterns = "/api/cart")
 public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
@@ -31,7 +33,7 @@ public class CartServlet extends HttpServlet {
 
     public void init(ServletConfig config) {
         try {
-            dataSource = (DataSource) new InitialContext().lookup("java:comp/env/jdbc/moviedb");
+            dataSource = ConnectionManager.getSlaveDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }
