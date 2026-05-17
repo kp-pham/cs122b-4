@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Context>
-    <Resource name="jdbc/moviedb"
+    <Resource name="jdbc/master"
+              auth="Container"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              type="javax.sql.DataSource"
+              initialSize="5"
+              maxTotal="100"
+              maxIdle="30"
+              minIdle="10"
+              maxWaitMillis="10000"
+              username="mytestuser"
+              password="My6$Password"
+              url="jdbc:mysql://localhost:3306/moviedb?autoReconnect=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+
+    <Resource name="jdbc/slave"
               auth="Container"
               driverClassName="com.mysql.cj.jdbc.Driver"
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
